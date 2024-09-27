@@ -72,6 +72,6 @@ class _updateDbState extends State<updateDb> {
           ),
         ),
       ),
-    )
+    );
   }
 }
