@@ -7,9 +7,9 @@ part of 'informer.dart';
 // **************************************************************************
 
 // ignore_for_file: type=lint
-class HardwareInformer extends _HardwareInformer
+class Hardware extends _Hardware
     with RealmEntity, RealmObjectBase, RealmObject {
-  HardwareInformer(
+  Hardware(
     int id,
     String name,
     String ip,
@@ -17,7 +17,7 @@ class HardwareInformer extends _HardwareInformer
     String passwd, {
     Iterable<int> gardenAssoc = const [],
   }) {
-    RealmObjectBase.set(this, '_id', id);
+    RealmObjectBase.set(this, '_idH', id);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'ip', ip);
     RealmObjectBase.set(this, 'ssid', ssid);
@@ -26,12 +26,12 @@ class HardwareInformer extends _HardwareInformer
         this, 'gardenAssoc', RealmList<int>(gardenAssoc));
   }
 
-  HardwareInformer._();
+  Hardware._();
 
   @override
-  int get id => RealmObjectBase.get<int>(this, '_id') as int;
+  int get id => RealmObjectBase.get<int>(this, '_idH') as int;
   @override
-  set id(int value) => RealmObjectBase.set(this, '_id', value);
+  set id(int value) => RealmObjectBase.set(this, '_idH', value);
 
   @override
   String get name => RealmObjectBase.get<String>(this, 'name') as String;
@@ -61,21 +61,19 @@ class HardwareInformer extends _HardwareInformer
       throw RealmUnsupportedSetError();
 
   @override
-  Stream<RealmObjectChanges<HardwareInformer>> get changes =>
-      RealmObjectBase.getChanges<HardwareInformer>(this);
+  Stream<RealmObjectChanges<Hardware>> get changes =>
+      RealmObjectBase.getChanges<Hardware>(this);
 
   @override
-  Stream<RealmObjectChanges<HardwareInformer>> changesFor(
-          [List<String>? keyPaths]) =>
-      RealmObjectBase.getChangesFor<HardwareInformer>(this, keyPaths);
+  Stream<RealmObjectChanges<Hardware>> changesFor([List<String>? keyPaths]) =>
+      RealmObjectBase.getChangesFor<Hardware>(this, keyPaths);
 
   @override
-  HardwareInformer freeze() =>
-      RealmObjectBase.freezeObject<HardwareInformer>(this);
+  Hardware freeze() => RealmObjectBase.freezeObject<Hardware>(this);
 
   EJsonValue toEJson() {
     return <String, dynamic>{
-      '_id': id.toEJson(),
+      '_idH': id.toEJson(),
       'name': name.toEJson(),
       'ip': ip.toEJson(),
       'ssid': ssid.toEJson(),
@@ -84,18 +82,18 @@ class HardwareInformer extends _HardwareInformer
     };
   }
 
-  static EJsonValue _toEJson(HardwareInformer value) => value.toEJson();
-  static HardwareInformer _fromEJson(EJsonValue ejson) {
+  static EJsonValue _toEJson(Hardware value) => value.toEJson();
+  static Hardware _fromEJson(EJsonValue ejson) {
     if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
-        '_id': EJsonValue id,
+        '_idH': EJsonValue id,
         'name': EJsonValue name,
         'ip': EJsonValue ip,
         'ssid': EJsonValue ssid,
         'passwd': EJsonValue passwd,
       } =>
-        HardwareInformer(
+        Hardware(
           fromEJson(id),
           fromEJson(name),
           fromEJson(ip),
@@ -108,12 +106,11 @@ class HardwareInformer extends _HardwareInformer
   }
 
   static final schema = () {
-    RealmObjectBase.registerFactory(HardwareInformer._);
+    RealmObjectBase.registerFactory(Hardware._);
     register(_toEJson, _fromEJson);
-    return const SchemaObject(
-        ObjectType.realmObject, HardwareInformer, 'HardwareInformer', [
+    return const SchemaObject(ObjectType.realmObject, Hardware, 'Hardware', [
       SchemaProperty('id', RealmPropertyType.int,
-          mapTo: '_id', primaryKey: true),
+          mapTo: '_idH', primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string),
       SchemaProperty('ip', RealmPropertyType.string),
       SchemaProperty('ssid', RealmPropertyType.string),
@@ -134,7 +131,7 @@ class GardenInformer extends _GardenInformer
     int noOfPlants, {
     Iterable<int> plantAssoc = const [],
   }) {
-    RealmObjectBase.set(this, '_id', id);
+    RealmObjectBase.set(this, '_idG', id);
     RealmObjectBase.set(this, 'noOfPlants', noOfPlants);
     RealmObjectBase.set<RealmList<int>>(
         this, 'plantAssoc', RealmList<int>(plantAssoc));
@@ -143,9 +140,9 @@ class GardenInformer extends _GardenInformer
   GardenInformer._();
 
   @override
-  int get id => RealmObjectBase.get<int>(this, '_id') as int;
+  int get id => RealmObjectBase.get<int>(this, '_idG') as int;
   @override
-  set id(int value) => RealmObjectBase.set(this, '_id', value);
+  set id(int value) => RealmObjectBase.set(this, '_idG', value);
 
   @override
   int get noOfPlants => RealmObjectBase.get<int>(this, 'noOfPlants') as int;
@@ -173,7 +170,7 @@ class GardenInformer extends _GardenInformer
 
   EJsonValue toEJson() {
     return <String, dynamic>{
-      '_id': id.toEJson(),
+      '_idG': id.toEJson(),
       'noOfPlants': noOfPlants.toEJson(),
       'plantAssoc': plantAssoc.toEJson(),
     };
@@ -184,7 +181,7 @@ class GardenInformer extends _GardenInformer
     if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
-        '_id': EJsonValue id,
+        '_idG': EJsonValue id,
         'noOfPlants': EJsonValue noOfPlants,
       } =>
         GardenInformer(
@@ -202,7 +199,7 @@ class GardenInformer extends _GardenInformer
     return const SchemaObject(
         ObjectType.realmObject, GardenInformer, 'GardenInformer', [
       SchemaProperty('id', RealmPropertyType.int,
-          mapTo: '_id', primaryKey: true),
+          mapTo: '_idG', primaryKey: true),
       SchemaProperty('noOfPlants', RealmPropertyType.int),
       SchemaProperty('plantAssoc', RealmPropertyType.int,
           collectionType: RealmCollectionType.list),
@@ -224,7 +221,7 @@ class PlantInformer extends _PlantInformer
     int attensionTime, {
     Iterable<String> promptHist = const [],
   }) {
-    RealmObjectBase.set(this, '_id', id);
+    RealmObjectBase.set(this, '_idP', id);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'shortDesc', shortDesc);
     RealmObjectBase.set(this, 'longDesc', longDesc);
@@ -237,9 +234,9 @@ class PlantInformer extends _PlantInformer
   PlantInformer._();
 
   @override
-  int get id => RealmObjectBase.get<int>(this, '_id') as int;
+  int get id => RealmObjectBase.get<int>(this, '_idP') as int;
   @override
-  set id(int value) => RealmObjectBase.set(this, '_id', value);
+  set id(int value) => RealmObjectBase.set(this, '_idP', value);
 
   @override
   String get name => RealmObjectBase.get<String>(this, 'name') as String;
@@ -291,7 +288,7 @@ class PlantInformer extends _PlantInformer
 
   EJsonValue toEJson() {
     return <String, dynamic>{
-      '_id': id.toEJson(),
+      '_idP': id.toEJson(),
       'name': name.toEJson(),
       'shortDesc': shortDesc.toEJson(),
       'longDesc': longDesc.toEJson(),
@@ -306,7 +303,7 @@ class PlantInformer extends _PlantInformer
     if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
-        '_id': EJsonValue id,
+        '_idP': EJsonValue id,
         'name': EJsonValue name,
         'shortDesc': EJsonValue shortDesc,
         'longDesc': EJsonValue longDesc,
@@ -332,7 +329,7 @@ class PlantInformer extends _PlantInformer
     return const SchemaObject(
         ObjectType.realmObject, PlantInformer, 'PlantInformer', [
       SchemaProperty('id', RealmPropertyType.int,
-          mapTo: '_id', primaryKey: true),
+          mapTo: '_idP', primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string),
       SchemaProperty('shortDesc', RealmPropertyType.string),
       SchemaProperty('longDesc', RealmPropertyType.string),

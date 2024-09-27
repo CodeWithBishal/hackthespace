@@ -3,9 +3,9 @@ import 'package:realm/realm.dart';
 part 'informer.realm.dart';
 
 @RealmModel()
-class _HardwareInformer {
+class _Hardware {
   @PrimaryKey()
-  @MapTo('_id')
+  @MapTo('_idH')
   late int id;
   late String name;
   late String ip;
@@ -17,7 +17,7 @@ class _HardwareInformer {
 @RealmModel()
 class _GardenInformer {
   @PrimaryKey()
-  @MapTo('_id')
+  @MapTo('_idG')
   late int id;
   late int noOfPlants;
   late List<int> plantAssoc;
@@ -26,7 +26,7 @@ class _GardenInformer {
 @RealmModel()
 class _PlantInformer {
   @PrimaryKey()
-  @MapTo('_id')
+  @MapTo('_idP')
   late int id;
   late String name;
   late String shortDesc;
