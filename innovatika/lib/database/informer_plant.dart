@@ -40,7 +40,7 @@ class Plant {
       image: json['image'] ?? '',
       shortDesc: json['shortDesc'] ?? '',
       longDesc: json['longDesc'] ?? '',
-      timeToGrow: json['timeToGrow'] ?? 0,
+      timeToGrow: json['timeToGrow'] ?? "",
       promptHist: (json['promptHist'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??

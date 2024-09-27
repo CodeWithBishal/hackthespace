@@ -1,7 +1,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:unsplash_client/unsplash_client.dart';
 
-Future<Uri> fetchImgUnsplash(String query) async {
+Future fetchImgUnsplash(String query, bool isList) async {
   await dotenv.load(fileName: 'assets/env/unsplash.env');
   final accessKey = dotenv.env['accessKey'];
   final secretKey = dotenv.env['secretKey'];
@@ -14,5 +14,9 @@ Future<Uri> fetchImgUnsplash(String query) async {
     ),
   );
   final photos = await client.photos.random(query: query).goAndGet();
-  return photos.first.urls.thumb;
+  if (isList) {
+    return photos;
+  } else {
+    return photos.first.urls.thumb;
+  }
 }

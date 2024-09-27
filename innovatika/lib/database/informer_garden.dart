@@ -7,26 +7,30 @@ class _GardenInformer {
   @PrimaryKey()
   @MapTo('_idG')
   late int id;
-  late int noOfPlants;
+  late String imgURL;
+  late String dateTime;
   late List<int> plantAssoc;
 }
 
 // Garden Model
 class Garden {
   late int id;
-  late int noOfPlants;
+  late String imgURL;
+  late String dateTime;
   late List<int> plantAssoc;
-  Garden(
-      {required this.id, required this.noOfPlants, this.plantAssoc = const []});
+  Garden({
+    required this.id,
+    this.imgURL = "",
+    this.dateTime = "",
+    this.plantAssoc = const [],
+  });
 
   factory Garden.fromJson(Map<String, dynamic> json) {
     return Garden(
-        id: json['id'],
-        noOfPlants: json['noOfPlants'],
-        plantAssoc: json['plantAssoc']);
+      id: json['id'],
+      imgURL: json["imgURL"],
+      dateTime: json["dateTime"],
+      plantAssoc: json['plantAssoc'],
+    );
   }
 }
-
-
-
-

@@ -11,11 +11,13 @@ class GardenInformer extends _GardenInformer
     with RealmEntity, RealmObjectBase, RealmObject {
   GardenInformer(
     int id,
-    int noOfPlants, {
+    String imgURL,
+    String dateTime, {
     Iterable<int> plantAssoc = const [],
   }) {
     RealmObjectBase.set(this, '_idG', id);
-    RealmObjectBase.set(this, 'noOfPlants', noOfPlants);
+    RealmObjectBase.set(this, 'imgURL', imgURL);
+    RealmObjectBase.set(this, 'dateTime', dateTime);
     RealmObjectBase.set<RealmList<int>>(
         this, 'plantAssoc', RealmList<int>(plantAssoc));
   }
@@ -28,9 +30,15 @@ class GardenInformer extends _GardenInformer
   set id(int value) => RealmObjectBase.set(this, '_idG', value);
 
   @override
-  int get noOfPlants => RealmObjectBase.get<int>(this, 'noOfPlants') as int;
+  String get imgURL => RealmObjectBase.get<String>(this, 'imgURL') as String;
   @override
-  set noOfPlants(int value) => RealmObjectBase.set(this, 'noOfPlants', value);
+  set imgURL(String value) => RealmObjectBase.set(this, 'imgURL', value);
+
+  @override
+  String get dateTime =>
+      RealmObjectBase.get<String>(this, 'dateTime') as String;
+  @override
+  set dateTime(String value) => RealmObjectBase.set(this, 'dateTime', value);
 
   @override
   RealmList<int> get plantAssoc =>
@@ -54,7 +62,8 @@ class GardenInformer extends _GardenInformer
   EJsonValue toEJson() {
     return <String, dynamic>{
       '_idG': id.toEJson(),
-      'noOfPlants': noOfPlants.toEJson(),
+      'imgURL': imgURL.toEJson(),
+      'dateTime': dateTime.toEJson(),
       'plantAssoc': plantAssoc.toEJson(),
     };
   }
@@ -65,11 +74,13 @@ class GardenInformer extends _GardenInformer
     return switch (ejson) {
       {
         '_idG': EJsonValue id,
-        'noOfPlants': EJsonValue noOfPlants,
+        'imgURL': EJsonValue imgURL,
+        'dateTime': EJsonValue dateTime,
       } =>
         GardenInformer(
           fromEJson(id),
-          fromEJson(noOfPlants),
+          fromEJson(imgURL),
+          fromEJson(dateTime),
           plantAssoc: fromEJson(ejson['plantAssoc']),
         ),
       _ => raiseInvalidEJson(ejson),
@@ -83,7 +94,8 @@ class GardenInformer extends _GardenInformer
         ObjectType.realmObject, GardenInformer, 'GardenInformer', [
       SchemaProperty('id', RealmPropertyType.int,
           mapTo: '_idG', primaryKey: true),
-      SchemaProperty('noOfPlants', RealmPropertyType.int),
+      SchemaProperty('imgURL', RealmPropertyType.string),
+      SchemaProperty('dateTime', RealmPropertyType.string),
       SchemaProperty('plantAssoc', RealmPropertyType.int,
           collectionType: RealmCollectionType.list),
     ]);

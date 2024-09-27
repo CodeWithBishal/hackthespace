@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:innovatika/database/informer_hardware.dart';
-import 'package:innovatika/widget/wifi.dart';
-import 'package:lottie/lottie.dart';
+import 'package:innovatika/widget/loading.dart';
 import 'package:realm/realm.dart';
 
 class Homepage extends StatefulWidget {
@@ -25,7 +24,7 @@ class _HomepageState extends State<Homepage> {
 
   @override
   void initState() {
-    // isPingSuccessful("192.168.4.1");
+    // isPingSuccessful("192.168.4.1")
     super.initState();
   }
 
@@ -38,8 +37,11 @@ class _HomepageState extends State<Homepage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var devices = snapshot.data;
+            if (devices!.isEmpty) {
+              return emptyLoading();
+            }
             return GridView.builder(
-              itemCount: devices!.length,
+              itemCount: devices.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
@@ -142,26 +144,7 @@ class _HomepageState extends State<Homepage> {
               },
             );
           } else {
-            return Center(
-                child: ListView(
-              children: [
-                const SizedBox(
-                  height: 40,
-                ),
-                Lottie.asset("assets/animation/empty.json"),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  'No devices found',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ));
+            return emptyLoading();
           }
         },
       ),

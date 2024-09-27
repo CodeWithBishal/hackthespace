@@ -2,10 +2,15 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:innovatika/database/informer_plant.dart';
 import 'package:innovatika/widget/appbar.dart';
+import 'package:innovatika/widget/garden_api.dart';
+import 'package:innovatika/widget/garden_widget.dart';
 import 'package:innovatika/widget/gemini.dart';
+import 'package:innovatika/widget/plant_widget.dart';
 import 'package:lottie/lottie.dart';
+import 'package:toastification/toastification.dart';
 
 class PlantDetails extends StatefulWidget {
   final Plant plant;
@@ -26,6 +31,9 @@ class _PlantDetailsState extends State<PlantDetails> {
   //   description: "",
   //   technique: "",
   // );
+
+  final TextEditingController gardenNameC = TextEditingController();
+
   late String description;
   late String technique;
   late String timeToGrow;
@@ -34,7 +42,7 @@ class _PlantDetailsState extends State<PlantDetails> {
     final stringJsonData = await GeminiClient(model: "gemini-1.5-flash-latest")
         .generateContentFromText(
       prompt:
-          'Hi, I am trying to plant ${widget.plant.name} in my location ${widget.location}, first give me a brief description of the plant, some growing techniques and suggest me some caring techniques, give me the output strictly in json format and no other text, remove any kind of formatting and remove all newline characters. remember output strictly in json format and no other text. here is the format(key value): {"description": "All description goes here", "techniques":"All techniques goes here", "timeToGrow":"actual growing time here no other data"} in minimum 200 words,techniques must only contain the growing techniques and description should only contain a description, description and techniques should be strictly unique. both description and techniques keys should be present and strictly only json',
+          'Hi, I am trying to plant ${widget.plant.name} in my location ${widget.location}, first give me a brief description of the plant, some growing techniques and suggest me some caring techniques, give me the output strictly in json format and no other text, remove any kind of formatting and remove all newline characters. remember output strictly in json format and no other text. here is the format(key value): {"description": "All description goes here", "techniques":"All techniques goes here", "timeToGrow":"actual growing time in 10 letters"} in minimum 200 words,techniques must only contain the growing techniques and description should only contain a description, description and techniques should be strictly unique. both description and techniques keys should be present and strictly only json',
     );
 
     final Map<String, dynamic> jsonData = jsonDecode(stringJsonData);
@@ -80,6 +88,183 @@ class _PlantDetailsState extends State<PlantDetails> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
+    ///
+    TextFormField gardenName = TextFormField(
+      controller: gardenNameC,
+      expands: false,
+      autofocus: false,
+      textInputAction: TextInputAction.done,
+      style: const TextStyle(
+        fontWeight: FontWeight.w300,
+        fontSize: 15,
+      ),
+      validator: (value) {
+        return null;
+      },
+      keyboardType: TextInputType.text,
+      decoration: const InputDecoration(
+        labelText: "Garden Name",
+        // prefixIcon: Icon(
+        //   LineIcons.university,
+        // ),
+      ),
+    );
+    void createGardenWid(BuildContext context, gardenID) async {
+      late bool isLoading = false;
+      final width = MediaQuery.of(context).size.width;
+      final height = MediaQuery.of(context).size.height;
+      final url = await fetchGardenImage();
+      if (!context.mounted) return;
+      showModalBottomSheet(
+        backgroundColor: Color.fromARGB(255, 237, 228, 251),
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: SizedBox(
+                  width: width,
+                  height: height / 4,
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        width: width - width / 15,
+                        child: const Text(
+                          "Add Garden ➕",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: width - width / 15,
+                        child: const Text(
+                          "Create a Garden using Garden ID",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        width: width - width / 15,
+                        child: Stack(
+                          children: [
+                            gardenName,
+                            Positioned(
+                              right: 3,
+                              bottom: 6,
+                              child: IconButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : () async {
+                                        if (gardenNameC.text.isNotEmpty &&
+                                            url.isNotEmpty) {
+                                          setState(() {
+                                            isLoading = true;
+                                          });
+                                          GardenManager()
+                                              .addGarden(gardenID, url);
+                                          var plantList =
+                                              await PlantManager().listPlant();
+                                          int plantLastID = 0;
+                                          if (plantList.isNotEmpty) {
+                                            plantLastID =
+                                                plantList.last?.id ?? 0;
+                                          }
+                                          PlantManager().addPlant(
+                                              widget.plant, plantLastID);
+                                          GardenManager().addAssociates(
+                                            gardenID,
+                                            plantLastID,
+                                          );
+                                          if (!context.mounted) return;
+                                          toastification.show(
+                                            context: context,
+                                            type: ToastificationType.success,
+                                            style: ToastificationStyle.flat,
+                                            alignment: Alignment.bottomCenter,
+                                            autoCloseDuration:
+                                                const Duration(seconds: 5),
+                                            title: Text(
+                                              "Garden Added Successfully",
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          );
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
+                                icon: const Icon(
+                                  Icons.check,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      );
+    }
+
+    void listGardens(BuildContext context, List<dynamic> garden, int gardenID) {
+      // late bool isLoading = false;
+      // final width = MediaQuery.of(context).size.width;
+      // final height = MediaQuery.of(context).size.height;
+      showModalBottomSheet(
+        backgroundColor: Color.fromARGB(255, 237, 228, 251),
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Image(image: garden[index].imgURL),
+                  title: Text(garden[index].name),
+                  trailing: IconButton(
+                    onPressed: () async {
+                      var list = await PlantManager().listPlant();
+                      int lastID = list.last?.id ?? 0;
+                      PlantManager().addPlant(widget.plant, lastID);
+                      GardenManager().addAssociates(garden[index].id, lastID);
+                    },
+                    icon: Icon(
+                      Iconsax.tick_circle,
+                    ),
+                  ),
+                );
+                // return Container();
+              },
+            );
+          });
+        },
+      );
+    }
+
+    ////
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: commonApp(
@@ -144,7 +329,31 @@ class _PlantDetailsState extends State<PlantDetails> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: TextButton.icon(
-                              onPressed: () {},
+                              onPressed: () async {
+                                final garden =
+                                    await GardenManager().listGarden();
+                                if (!context.mounted) return;
+                                if (garden.isEmpty) {
+                                  createGardenWid(context, 0);
+                                } else {
+                                  var list = await GardenManager().listGarden();
+                                  int lastID = list.last?.id ?? 0;
+                                  if (!context.mounted) return;
+                                  listGardens(context, garden, lastID);
+                                }
+                                //                       PlantManager().addPlant(widget.plant);
+                                //                       toastification.show(
+                                //   context: context,
+                                //   type: ToastificationType.success,
+                                //   style: ToastificationStyle.flat,
+                                //   alignment: Alignment.bottomCenter,
+                                //   autoCloseDuration: const Duration(seconds: 5),
+                                //   title: Text(
+                                //     "Plan",
+                                //     textAlign: TextAlign.center,
+                                //   ),
+                                // );
+                              },
                               style: const ButtonStyle(
                                 backgroundColor: WidgetStatePropertyAll(
                                   Color(
