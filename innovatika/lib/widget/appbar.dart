@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:innovatika/device_setup.dart';
+import 'package:innovatika/pages/device_setup.dart';
 
 AppBar commonApp({
   required BuildContext context,

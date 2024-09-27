@@ -2,7 +2,7 @@ import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:innovatika/homepage.dart';
+import 'package:innovatika/pages/homepage.dart';
 import 'package:innovatika/widget/appbar.dart';
 
 class NavBar extends StatefulWidget {

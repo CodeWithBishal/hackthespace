@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:innovatika/nav.dart';
+import 'package:innovatika/widget/nav.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -59,6 +59,8 @@ dependencies:
   async: ^2.11.0
   iconsax_flutter: ^1.0.0
   flashy_tab_bar2: ^0.0.10
+  mobile_scanner: ^5.2.3
+  wifi_iot: ^0.3.19+1
   # background_remover: ^0.0.3
 
 dev_dependencies:
