@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:innovatika/database/informer_hardware.dart';
+import 'package:innovatika/widget/loading.dart';
 import 'package:lottie/lottie.dart';
 import 'package:realm/realm.dart';
 
@@ -18,8 +19,8 @@ class _HomepageState extends State<Homepage> {
         await Realm.open(Configuration.local(([HardwareInformer.schema])));
 
     // Fetch all users from MongoDB Realm
-    var users = config.all<HardwareInformer>().toList();
-    return users;
+    var devices = config.all<HardwareInformer>().toList();
+    return devices;
   }
 
   @override
@@ -31,30 +32,8 @@ class _HomepageState extends State<Homepage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var devices = snapshot.data;
-            if (devices!.isEmpty) {
-              return Center(
-                  child: ListView(
-                children: [
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  Lottie.asset("assets/animation/empty.json"),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    'No devices found',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ));
-            }
             return GridView.builder(
-              itemCount: devices.length,
+              itemCount: devices!.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
@@ -157,7 +136,26 @@ class _HomepageState extends State<Homepage> {
               },
             );
           } else {
-            return Container();
+            return Center(
+                child: ListView(
+              children: [
+                const SizedBox(
+                  height: 40,
+                ),
+                Lottie.asset("assets/animation/empty.json"),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text(
+                  'No devices found',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ));
           }
         },
       ),
