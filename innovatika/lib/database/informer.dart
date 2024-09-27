@@ -129,7 +129,7 @@ Future<Widget> uiUpdateHardware(isOffline) async {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Image.asset(
-                          'assets/images/devices.png',
+                          'assets/images/device.jpg',
                           fit: BoxFit.contain,
                           height: 70,
                           width: 70,
