@@ -11,8 +11,7 @@ class _PlantInformer {
   late String image;
   late String shortDesc;
   late String longDesc;
-  late int timeToGrow;
-  late int attensionTime;
+  late String timeToGrow;
   late List<String> promptHist;
 }
 
@@ -22,8 +21,7 @@ class Plant {
   late String image;
   late String shortDesc;
   late String longDesc;
-  late int timeToGrow;
-  late int attensionTime;
+  late String timeToGrow;
   late List<String> promptHist;
 
   Plant(
@@ -33,7 +31,6 @@ class Plant {
       this.shortDesc = "",
       this.longDesc = "",
       required this.timeToGrow,
-      this.attensionTime = 0,
       this.promptHist = const []});
 
   factory Plant.fromJson(Map<String, dynamic> json) {
@@ -44,7 +41,6 @@ class Plant {
       shortDesc: json['shortDesc'] ?? '',
       longDesc: json['longDesc'] ?? '',
       timeToGrow: json['timeToGrow'] ?? 0,
-      attensionTime: json['attensionTime'] ?? 0,
       promptHist: (json['promptHist'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??

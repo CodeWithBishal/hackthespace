@@ -15,8 +15,7 @@ class PlantInformer extends _PlantInformer
     String image,
     String shortDesc,
     String longDesc,
-    int timeToGrow,
-    int attensionTime, {
+    String timeToGrow, {
     Iterable<String> promptHist = const [],
   }) {
     RealmObjectBase.set(this, '_idP', id);
@@ -25,7 +24,6 @@ class PlantInformer extends _PlantInformer
     RealmObjectBase.set(this, 'shortDesc', shortDesc);
     RealmObjectBase.set(this, 'longDesc', longDesc);
     RealmObjectBase.set(this, 'timeToGrow', timeToGrow);
-    RealmObjectBase.set(this, 'attensionTime', attensionTime);
     RealmObjectBase.set<RealmList<String>>(
         this, 'promptHist', RealmList<String>(promptHist));
   }
@@ -60,16 +58,11 @@ class PlantInformer extends _PlantInformer
   set longDesc(String value) => RealmObjectBase.set(this, 'longDesc', value);
 
   @override
-  int get timeToGrow => RealmObjectBase.get<int>(this, 'timeToGrow') as int;
+  String get timeToGrow =>
+      RealmObjectBase.get<String>(this, 'timeToGrow') as String;
   @override
-  set timeToGrow(int value) => RealmObjectBase.set(this, 'timeToGrow', value);
-
-  @override
-  int get attensionTime =>
-      RealmObjectBase.get<int>(this, 'attensionTime') as int;
-  @override
-  set attensionTime(int value) =>
-      RealmObjectBase.set(this, 'attensionTime', value);
+  set timeToGrow(String value) =>
+      RealmObjectBase.set(this, 'timeToGrow', value);
 
   @override
   RealmList<String> get promptHist =>
@@ -98,7 +91,6 @@ class PlantInformer extends _PlantInformer
       'shortDesc': shortDesc.toEJson(),
       'longDesc': longDesc.toEJson(),
       'timeToGrow': timeToGrow.toEJson(),
-      'attensionTime': attensionTime.toEJson(),
       'promptHist': promptHist.toEJson(),
     };
   }
@@ -114,7 +106,6 @@ class PlantInformer extends _PlantInformer
         'shortDesc': EJsonValue shortDesc,
         'longDesc': EJsonValue longDesc,
         'timeToGrow': EJsonValue timeToGrow,
-        'attensionTime': EJsonValue attensionTime,
       } =>
         PlantInformer(
           fromEJson(id),
@@ -123,7 +114,6 @@ class PlantInformer extends _PlantInformer
           fromEJson(shortDesc),
           fromEJson(longDesc),
           fromEJson(timeToGrow),
-          fromEJson(attensionTime),
           promptHist: fromEJson(ejson['promptHist']),
         ),
       _ => raiseInvalidEJson(ejson),
@@ -141,8 +131,7 @@ class PlantInformer extends _PlantInformer
       SchemaProperty('image', RealmPropertyType.string),
       SchemaProperty('shortDesc', RealmPropertyType.string),
       SchemaProperty('longDesc', RealmPropertyType.string),
-      SchemaProperty('timeToGrow', RealmPropertyType.int),
-      SchemaProperty('attensionTime', RealmPropertyType.int),
+      SchemaProperty('timeToGrow', RealmPropertyType.string),
       SchemaProperty('promptHist', RealmPropertyType.string,
           collectionType: RealmCollectionType.list),
     ]);
