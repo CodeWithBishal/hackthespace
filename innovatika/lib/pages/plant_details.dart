@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:innovatika/database/informer_plant.dart';
+import 'package:innovatika/widget/appbar.dart';
 import 'package:innovatika/widget/gemini.dart';
 import 'package:lottie/lottie.dart';
 
@@ -27,12 +28,13 @@ class _PlantDetailsState extends State<PlantDetails> {
   // );
   late String description;
   late String technique;
+  late String timeToGrow;
   late bool isShowpage = false;
   Future fetchDescription() async {
     final stringJsonData = await GeminiClient(model: "gemini-1.5-flash-latest")
         .generateContentFromText(
       prompt:
-          'Hi, I am trying to plant ${widget.plant.name} in my location ${widget.location}, first give me a brief description of the plant, some growing techniques and suggest me some caring techniques, give me the output strictly in json format and no other text, remove any kind of formatting and remove all newline characters. remember output strictly in json format and no other text. here is the format(key value): {"description": "All description goes here", "techniques":"All techniques goes here"} in minimum 200 words,techniques must only contain the growing techniques and description should only contain a description, description and techniques should be strictly unique. both description and techniques keys should be present and strictly only json',
+          'Hi, I am trying to plant ${widget.plant.name} in my location ${widget.location}, first give me a brief description of the plant, some growing techniques and suggest me some caring techniques, give me the output strictly in json format and no other text, remove any kind of formatting and remove all newline characters. remember output strictly in json format and no other text. here is the format(key value): {"description": "All description goes here", "techniques":"All techniques goes here", "timeToGrow":"actual growing time here no other data"} in minimum 200 words,techniques must only contain the growing techniques and description should only contain a description, description and techniques should be strictly unique. both description and techniques keys should be present and strictly only json',
     );
 
     final Map<String, dynamic> jsonData = jsonDecode(stringJsonData);
@@ -40,6 +42,7 @@ class _PlantDetailsState extends State<PlantDetails> {
     setState(() {
       description = jsonData["description"] ?? "";
       technique = jsonData["techniques"] ?? "";
+      timeToGrow = jsonData["timeToGrow"] ?? "";
     });
 
     if (description.isEmpty || technique.isEmpty) {
@@ -78,33 +81,10 @@ class _PlantDetailsState extends State<PlantDetails> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 242, 255, 248),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
-        actions: [
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back_ios_outlined,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          )
-        ],
+      backgroundColor: Colors.white,
+      appBar: commonApp(
+        context: context,
+        title: widget.plant.name,
       ),
       body: isShowpage
           ? ListView(
@@ -142,38 +122,54 @@ class _PlantDetailsState extends State<PlantDetails> {
                         widget.plant.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: 23,
                           fontFamily: "Ubuntu",
                         ),
                         textAlign: TextAlign.start,
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton.icon(
-                          onPressed: () {},
-                          style: const ButtonStyle(
-                            backgroundColor: WidgetStatePropertyAll(
-                              Color(
-                                0xffffe6e6,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              timeToGrow,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15,
+                                fontFamily: "Ubuntu",
                               ),
                             ),
                           ),
-                          label: const Text(
-                            "Save",
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 255, 146, 146),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton.icon(
+                              onPressed: () {},
+                              style: const ButtonStyle(
+                                backgroundColor: WidgetStatePropertyAll(
+                                  Color(
+                                    0xffffe6e6,
+                                  ),
+                                ),
+                              ),
+                              label: const Text(
+                                "Save",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 146, 146),
+                                ),
+                              ),
+                              icon: const Icon(
+                                Icons.favorite,
+                                color: Color.fromARGB(
+                                  255,
+                                  255,
+                                  146,
+                                  146,
+                                ),
+                              ),
                             ),
                           ),
-                          icon: const Icon(
-                            Icons.favorite,
-                            color: Color.fromARGB(
-                              255,
-                              255,
-                              146,
-                              146,
-                            ),
-                          ),
-                        ),
+                        ],
                       ),
                       const Text(
                         "Description",
