@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'informerGarden.dart';
+part of 'informer_garden.dart';
 
 // **************************************************************************
 // RealmObjectGenerator

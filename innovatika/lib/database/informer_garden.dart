@@ -1,6 +1,6 @@
 import 'package:realm/realm.dart';
 
-part 'informerGarden.realm.dart';
+part 'informer_garden.realm.dart';
 
 @RealmModel()
 class _GardenInformer {

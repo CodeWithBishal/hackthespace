@@ -1,5 +1,5 @@
 import 'package:realm/realm.dart';
-part 'informerHardware.realm.dart';
+part 'informer_hardware.realm.dart';
 
 @RealmModel()
 class _HardwareInformer {

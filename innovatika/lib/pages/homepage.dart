@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:innovatika/database/informerHardware.dart';
+import 'package:innovatika/database/informer_hardware.dart';
 import 'package:lottie/lottie.dart';
 import 'package:realm/realm.dart';
 
- class Homepage extends StatefulWidget {
+class Homepage extends StatefulWidget {
   const Homepage({super.key});
 
   @override

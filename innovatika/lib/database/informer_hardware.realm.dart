@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'informerHardware.dart';
+part of 'informer_hardware.dart';
 
 // **************************************************************************
 // RealmObjectGenerator
