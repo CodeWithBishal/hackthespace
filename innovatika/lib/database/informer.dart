@@ -64,7 +64,7 @@ Future<Widget> uiUpdateHardware(isOffline) async {
   return StreamBuilder<RealmResultsChanges<Hardware>>(
     stream: tasksListenable,
     builder: (context, espDevices) {
-      if (espDevices.hasData || espDevices == null) {
+      if (espDevices.hasData) {
         return Center(
             child: ListView(
           children: [
