@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:innovatika/database/informer.dart';
 
-class Homepage extends StatefulWidget {
+ class Homepage extends StatefulWidget {
   const Homepage({super.key});
 
   @override

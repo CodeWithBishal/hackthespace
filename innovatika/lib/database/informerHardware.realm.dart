@@ -14,7 +14,8 @@ class HardwareInformer extends _HardwareInformer
     String name,
     String ip,
     String ssid,
-    String passwd, {
+    String passwd,
+    String userId, {
     Iterable<int> gardenAssoc = const [],
   }) {
     RealmObjectBase.set(this, '_idH', id);
@@ -24,6 +25,7 @@ class HardwareInformer extends _HardwareInformer
     RealmObjectBase.set(this, 'passwd', passwd);
     RealmObjectBase.set<RealmList<int>>(
         this, 'gardenAssoc', RealmList<int>(gardenAssoc));
+    RealmObjectBase.set(this, 'userId', userId);
   }
 
   HardwareInformer._();
@@ -61,6 +63,11 @@ class HardwareInformer extends _HardwareInformer
       throw RealmUnsupportedSetError();
 
   @override
+  String get userId => RealmObjectBase.get<String>(this, 'userId') as String;
+  @override
+  set userId(String value) => RealmObjectBase.set(this, 'userId', value);
+
+  @override
   Stream<RealmObjectChanges<HardwareInformer>> get changes =>
       RealmObjectBase.getChanges<HardwareInformer>(this);
 
@@ -81,6 +88,7 @@ class HardwareInformer extends _HardwareInformer
       'ssid': ssid.toEJson(),
       'passwd': passwd.toEJson(),
       'gardenAssoc': gardenAssoc.toEJson(),
+      'userId': userId.toEJson(),
     };
   }
 
@@ -94,6 +102,7 @@ class HardwareInformer extends _HardwareInformer
         'ip': EJsonValue ip,
         'ssid': EJsonValue ssid,
         'passwd': EJsonValue passwd,
+        'userId': EJsonValue userId,
       } =>
         HardwareInformer(
           fromEJson(id),
@@ -101,6 +110,7 @@ class HardwareInformer extends _HardwareInformer
           fromEJson(ip),
           fromEJson(ssid),
           fromEJson(passwd),
+          fromEJson(userId),
           gardenAssoc: fromEJson(ejson['gardenAssoc']),
         ),
       _ => raiseInvalidEJson(ejson),
@@ -120,6 +130,7 @@ class HardwareInformer extends _HardwareInformer
       SchemaProperty('passwd', RealmPropertyType.string),
       SchemaProperty('gardenAssoc', RealmPropertyType.int,
           collectionType: RealmCollectionType.list),
+      SchemaProperty('userId', RealmPropertyType.string),
     ]);
   }();
 

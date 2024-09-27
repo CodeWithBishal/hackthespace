@@ -10,3 +10,18 @@ class _GardenInformer {
   late int noOfPlants;
   late List<int> plantAssoc;
 }
+
+class Garden {
+  late int id;
+  late int noOfPlants;
+  late List<int> plantAssoc;
+  Garden(
+      {required this.id, required this.noOfPlants, this.plantAssoc = const []});
+
+  factory Garden.fromJson(Map<String, dynamic> json) {
+    return Garden(
+        id: json['id'],
+        noOfPlants: json['noOfPlants'],
+        plantAssoc: json['plantAssoc']);
+  }
+}
