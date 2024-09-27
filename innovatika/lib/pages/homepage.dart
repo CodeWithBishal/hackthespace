@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:realm/realm.dart';
+import 'package:innovatika/database/informer.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -15,7 +15,16 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Scaffold(),
+      body: FutureBuilder(
+        future: uiUpdateHardware(isOffline),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return snapshot.data ?? Container();
+          } else {
+            return Container();
+          }
+        },
+      ),
     );
   }
 }

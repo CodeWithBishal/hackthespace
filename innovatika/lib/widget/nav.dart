@@ -51,8 +51,8 @@ class _NavBarState extends State<NavBar> {
             title: const Text('Home'),
           ),
           FlashyTabBarItem(
-            icon: const Icon(Iconsax.folder),
-            title: const Text('Files'),
+            icon: const Icon(Iconsax.search_normal),
+            title: const Text('Suggest Plants'),
           ),
           FlashyTabBarItem(
             icon: const Icon(Iconsax.setting),
