@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:realm/realm.dart';
-
 part 'informerHardware.realm.dart';
 
 @RealmModel()
