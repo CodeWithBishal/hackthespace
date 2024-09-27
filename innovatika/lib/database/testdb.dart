@@ -8,14 +8,13 @@ class updateDb extends StatefulWidget {
 }
 
 class _updateDbState extends State<updateDb> {
-
   late String name;
   late String ip;
   late String ssid;
   late String passwd;
   late List<int> gardenIDAssco;
   // String text = "No Value Entered";
- 
+
   void updateData() {
     print(name);
     print(ip);
@@ -34,44 +33,38 @@ class _updateDbState extends State<updateDb> {
           child: Column(
             children: [
               TextField(
-                decoration: InputDecoration(
-                    hintText: "Enter Name"
-                ),
-                onChanged: (value){
+                decoration: InputDecoration(hintText: "Enter Name"),
+                onChanged: (value) {
                   name = value;
                 },
               ),
               TextField(
-                decoration: InputDecoration(
-                    hintText: "Enter IP"
-                ),
-                onChanged: (value){
+                decoration: InputDecoration(hintText: "Enter IP"),
+                onChanged: (value) {
                   ip = value;
                 },
               ),
               TextField(
-                decoration: InputDecoration(
-                    hintText: "Enter SSID"
-                ),
-                onChanged: (value){
+                decoration: InputDecoration(hintText: "Enter SSID"),
+                onChanged: (value) {
                   ssid = value;
                 },
               ),
               TextField(
-                decoration: InputDecoration(
-                    hintText: "Enter Password"
-                ),
-                onChanged: (value){
+                decoration: InputDecoration(hintText: "Enter Password"),
+                onChanged: (value) {
                   passwd = value;
                 },
               ),
-              ElevatedButton(onPressed: (){
-                updateData();
-              }, child: Text("Update"))
+              ElevatedButton(
+                  onPressed: () {
+                    updateData();
+                  },
+                  child: Text("Update"))
             ],
           ),
         ),
       ),
-    )
+    );
   }
 }

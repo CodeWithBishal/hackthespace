@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:realm/realm.dart';
 
 part 'informer.realm.dart';
@@ -57,7 +58,7 @@ class HardwareUpdate {
   }
 }
 
-Future<Widget> uiUpdateHardware(isOffline) async{
+Future<Widget> uiUpdateHardware(isOffline) async {
   final realm = await Realm.open(Configuration.local(([Hardware.schema])));
   final tasksListenable = realm.all<Hardware>().changes;
   return StreamBuilder<RealmResultsChanges<Hardware>>(
@@ -86,7 +87,7 @@ Future<Widget> uiUpdateHardware(isOffline) async{
         ));
       }
       return GridView.builder(
-        itemCount: espDevices.data?.results.length??0,
+        itemCount: espDevices.data?.results.length ?? 0,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 10,
