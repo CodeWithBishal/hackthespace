@@ -6,34 +6,34 @@ part 'informer_plant.realm.dart';
 class _PlantInformer {
   @PrimaryKey()
   @MapTo('_idP')
-  late int id;
+  late int? id;
   late String name;
   late String image;
-  late String shortDesc;
-  late String longDesc;
-  late int timeToGrow;
-  late int attensionTime;
-  late List<String> promptHist;
+  late String? shortDesc;
+  late String? longDesc;
+  late int? timeToGrow;
+  late int? attensionTime;
+  late List<String>? promptHist;
 }
 
 class Plant {
-  late int id;
+  late int? id;
   late String name;
   late String image;
-  late String shortDesc;
-  late String longDesc;
+  late String? shortDesc;
+  late String? longDesc;
   late int timeToGrow;
-  late int attensionTime;
-  late List<String> promptHist;
+  late int? attensionTime;
+  late List<String>? promptHist;
 
   Plant(
-      {required this.id,
+      {this.id,
       required this.name,
       required this.image,
-      required this.shortDesc,
-      required this.longDesc,
+      this.shortDesc,
+      this.longDesc,
       required this.timeToGrow,
-      required this.attensionTime,
+      this.attensionTime,
       this.promptHist = const []});
 
   factory Plant.fromJson(Map<String, dynamic> json) {

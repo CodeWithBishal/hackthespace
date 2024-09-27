@@ -11,6 +11,7 @@ class _GardenInformer {
   late List<int> plantAssoc;
 }
 
+// Garden Model
 class Garden {
   late int id;
   late int noOfPlants;
@@ -25,3 +26,7 @@ class Garden {
         plantAssoc: json['plantAssoc']);
   }
 }
+
+
+
+
