@@ -10,7 +10,6 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   late bool isOffline = true;
-  final tasksListenable = realm.all<Task>().changes.asValueListenable();
 
   @override
   Widget build(BuildContext context) {
