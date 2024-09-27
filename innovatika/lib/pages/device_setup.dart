@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:innovatika/database/informer.dart';
+import 'package:innovatika/database/informerHardware.dart';
 import 'package:innovatika/widget/appbar.dart';
 import 'package:innovatika/widget/loading.dart';
 import 'package:innovatika/widget/wifi.dart';
@@ -78,7 +78,7 @@ class _DeviceSetupState extends State<DeviceSetup> {
           return;
         } else {
           //TODO
-          Hardware(
+          HardwareInformer(
             0,
             devName.text,
             ipAddr.text,
