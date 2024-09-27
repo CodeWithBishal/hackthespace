@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:innovatika/pages/homepage.dart';
+import 'package:innovatika/pages/plant_catalogue.dart';
 import 'package:innovatika/widget/appbar.dart';
 
 class NavBar extends StatefulWidget {
@@ -27,7 +28,7 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     List<Widget> tabItems = [
       const Homepage(),
-      const Center(child: Text("2")),
+      PlantCategorization(),
       const Center(child: Text("3")),
     ];
 
@@ -51,12 +52,12 @@ class _NavBarState extends State<NavBar> {
             title: const Text('Home'),
           ),
           FlashyTabBarItem(
-            icon: const Icon(Iconsax.search_normal),
+            icon: const Icon(Iconsax.location),
             title: const Text('Suggest Plants'),
           ),
           FlashyTabBarItem(
-            icon: const Icon(Iconsax.setting),
-            title: const Text('Settings'),
+            icon: const Icon(Iconsax.box),
+            title: const Text('Gardens'),
           ),
         ],
       ),

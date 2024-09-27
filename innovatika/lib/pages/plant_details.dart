@@ -232,7 +232,7 @@ class _PlantDetailsState extends State<PlantDetails> {
           const SizedBox(
             height: 20,
           ),
-          Lottie.asset("assets/animatedImg/wait.json"),
+          Lottie.asset("assets/animation/wait.json"),
           const SizedBox(
             height: 50,
           ),

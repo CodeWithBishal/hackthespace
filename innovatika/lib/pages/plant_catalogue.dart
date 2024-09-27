@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -25,16 +24,16 @@ class _PlantCategorizationState extends State<PlantCategorization> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    precacheImage(const AssetImage('assets/img/flower.png'), context);
-    precacheImage(const AssetImage('assets/img/fruit.png'), context);
-    precacheImage(const AssetImage('assets/img/vegetables.png'), context);
-    precacheImage(const AssetImage('assets/img/herbs.png'), context);
-    precacheImage(const AssetImage('assets/img/shrubs.png'), context);
+    precacheImage(const AssetImage('assets/images/flower.png'), context);
+    precacheImage(const AssetImage('assets/images/fruit.png'), context);
+    precacheImage(const AssetImage('assets/images/vegetables.png'), context);
+    precacheImage(const AssetImage('assets/images/herbs.png'), context);
+    precacheImage(const AssetImage('assets/images/shrubs.png'), context);
     _preloadAnimation();
   }
 
   Future<void> _preloadAnimation() async {
-    final animation1 = AssetLottie('assets/animatedImg/wait.json');
+    final animation1 = AssetLottie('assets/animation/wait.json');
     await animation1.load();
     // setState(() {
     //   oldComposition = composition;
@@ -263,35 +262,7 @@ class _PlantCategorizationState extends State<PlantCategorization> {
     // Parse the JSON data
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 242, 255, 248),
-      // appBar: AppBar(title: const Text('Plant Categorization')),
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 242, 255, 248),
-        automaticallyImplyLeading: false,
-        actions: [
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back_ios_outlined,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+      backgroundColor: Colors.white,
       body: displayLocationPermission
           ? locationAnimation()
           : isGeminiRequestInProgress
@@ -303,7 +274,7 @@ class _PlantCategorizationState extends State<PlantCategorization> {
   Widget locationAnimation() => Center(
         child: ListView(
           children: [
-            Lottie.asset("assets/animatedImg/location.json"),
+            Lottie.asset("assets/animation/location.json"),
             const SizedBox(
               height: 50,
             ),
@@ -340,7 +311,7 @@ class _PlantCategorizationState extends State<PlantCategorization> {
   Widget geminiReqAnimation(double width) {
     return ListView(
       children: [
-        Lottie.asset("assets/animatedImg/geminiReqAnimation.json"),
+        Lottie.asset("assets/animation/geminiReqAnimation.json"),
         const SizedBox(
           height: 50,
         ),
@@ -409,7 +380,7 @@ class _PlantCategorizationState extends State<PlantCategorization> {
                     widthFactor: 0.8, // 80% width of the parent container
                     heightFactor: 0.8, // 80% height of the parent container
                     child: Image.asset(
-                      "assets/img/flower.png",
+                      "assets/images/flower.png",
                       fit: BoxFit
                           .cover, // Cover the entire area of FractionallySizedBox
                     ),
@@ -501,7 +472,7 @@ class _PlantCategorizationState extends State<PlantCategorization> {
                     widthFactor: 0.8, // 80% width of the parent container
                     heightFactor: 0.8, // 80% height of the parent container
                     child: Image.asset(
-                      "assets/img/fruit.png",
+                      "assets/images/fruit.png",
                       fit: BoxFit
                           .cover, // Cover the entire area of FractionallySizedBox
                     ),
@@ -593,7 +564,7 @@ class _PlantCategorizationState extends State<PlantCategorization> {
                     widthFactor: 0.8, // 80% width of the parent container
                     heightFactor: 0.8, // 80% height of the parent container
                     child: Image.asset(
-                      "assets/img/vegetables.png",
+                      "assets/images/vegetables.png",
                       fit: BoxFit
                           .cover, // Cover the entire area of FractionallySizedBox
                     ),
@@ -685,7 +656,7 @@ class _PlantCategorizationState extends State<PlantCategorization> {
                     widthFactor: 0.8, // 80% width of the parent container
                     heightFactor: 0.8, // 80% height of the parent container
                     child: Image.asset(
-                      "assets/img/herbs.png",
+                      "assets/images/herbs.png",
                       fit: BoxFit
                           .cover, // Cover the entire area of FractionallySizedBox
                     ),
@@ -777,7 +748,7 @@ class _PlantCategorizationState extends State<PlantCategorization> {
                     widthFactor: 0.8, // 80% width of the parent container
                     heightFactor: 0.8, // 80% height of the parent container
                     child: Image.asset(
-                      "assets/img/shrubs.png",
+                      "assets/images/shrubs.png",
                       fit: BoxFit
                           .cover, // Cover the entire area of FractionallySizedBox
                     ),

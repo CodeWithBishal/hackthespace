@@ -12,6 +12,7 @@ List<Plant> handleFruitMapping(geminiData) {
       geminiData,
     );
     fruitJsonData = json.decode(data);
+    // fruit = Plant(id: 1, name: fruitJsonData[""], image: image, shortDesc: shortDesc, longDesc: longDesc, timeToGrow: timeToGrow, attensionTime: attensionTime);
     fruit = fruitJsonData.map<Plant>((json) => Plant.fromJson(json)).toList();
   } else {
     fruitJsonData = json.decode(geminiData);

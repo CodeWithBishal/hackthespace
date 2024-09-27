@@ -14,7 +14,7 @@ class GeminiClient {
   Future generateContentFromText({
     required String prompt,
   }) async {
-    await dotenv.load(fileName: 'assets/data.env');
+    await dotenv.load(fileName: 'assets/env/data.env');
     final apiKey = dotenv.env['GEMINI_API_KEY'];
     final geminiModel =
         GenerativeModel(model: model, apiKey: apiKey.toString());
