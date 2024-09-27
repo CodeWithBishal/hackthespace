@@ -3,5 +3,5 @@ String sensorURLConst(String ipAddr) {
 }
 
 String pingURLConst(String ipAddr) {
-  return "http://$ipAddr:5000/ping";
+  return "http://$ipAddr";
 }

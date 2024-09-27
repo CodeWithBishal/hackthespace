@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:innovatika/database/informer_hardware.dart';
+import 'package:innovatika/widget/wifi.dart';
 import 'package:lottie/lottie.dart';
 import 'package:realm/realm.dart';
 
@@ -20,6 +21,12 @@ class _HomepageState extends State<Homepage> {
     // Fetch all users from MongoDB Realm
     var devices = config.all<HardwareInformer>().toList();
     return devices;
+  }
+
+  @override
+  void initState() {
+    // isPingSuccessful("192.168.4.1");
+    super.initState();
   }
 
   @override
