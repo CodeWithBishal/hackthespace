@@ -12,6 +12,7 @@ class PlantInformer extends _PlantInformer
   PlantInformer(
     int id,
     String name,
+    String image,
     String shortDesc,
     String longDesc,
     int timeToGrow,
@@ -20,6 +21,7 @@ class PlantInformer extends _PlantInformer
   }) {
     RealmObjectBase.set(this, '_idP', id);
     RealmObjectBase.set(this, 'name', name);
+    RealmObjectBase.set(this, 'image', image);
     RealmObjectBase.set(this, 'shortDesc', shortDesc);
     RealmObjectBase.set(this, 'longDesc', longDesc);
     RealmObjectBase.set(this, 'timeToGrow', timeToGrow);
@@ -39,6 +41,11 @@ class PlantInformer extends _PlantInformer
   String get name => RealmObjectBase.get<String>(this, 'name') as String;
   @override
   set name(String value) => RealmObjectBase.set(this, 'name', value);
+
+  @override
+  String get image => RealmObjectBase.get<String>(this, 'image') as String;
+  @override
+  set image(String value) => RealmObjectBase.set(this, 'image', value);
 
   @override
   String get shortDesc =>
@@ -87,6 +94,7 @@ class PlantInformer extends _PlantInformer
     return <String, dynamic>{
       '_idP': id.toEJson(),
       'name': name.toEJson(),
+      'image': image.toEJson(),
       'shortDesc': shortDesc.toEJson(),
       'longDesc': longDesc.toEJson(),
       'timeToGrow': timeToGrow.toEJson(),
@@ -102,6 +110,7 @@ class PlantInformer extends _PlantInformer
       {
         '_idP': EJsonValue id,
         'name': EJsonValue name,
+        'image': EJsonValue image,
         'shortDesc': EJsonValue shortDesc,
         'longDesc': EJsonValue longDesc,
         'timeToGrow': EJsonValue timeToGrow,
@@ -110,6 +119,7 @@ class PlantInformer extends _PlantInformer
         PlantInformer(
           fromEJson(id),
           fromEJson(name),
+          fromEJson(image),
           fromEJson(shortDesc),
           fromEJson(longDesc),
           fromEJson(timeToGrow),
@@ -128,6 +138,7 @@ class PlantInformer extends _PlantInformer
       SchemaProperty('id', RealmPropertyType.int,
           mapTo: '_idP', primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string),
+      SchemaProperty('image', RealmPropertyType.string),
       SchemaProperty('shortDesc', RealmPropertyType.string),
       SchemaProperty('longDesc', RealmPropertyType.string),
       SchemaProperty('timeToGrow', RealmPropertyType.int),

@@ -8,6 +8,7 @@ class _PlantInformer {
   @MapTo('_idP')
   late int id;
   late String name;
+  late String image;
   late String shortDesc;
   late String longDesc;
   late int timeToGrow;
@@ -18,6 +19,7 @@ class _PlantInformer {
 class Plant {
   late int id;
   late String name;
+  late String image;
   late String shortDesc;
   late String longDesc;
   late int timeToGrow;
@@ -27,6 +29,7 @@ class Plant {
   Plant(
       {required this.id,
       required this.name,
+      required this.image,
       required this.shortDesc,
       required this.longDesc,
       required this.timeToGrow,
@@ -35,12 +38,14 @@ class Plant {
 
   factory Plant.fromJson(Map<String, dynamic> json) {
     return Plant(
-        id: json['_idP'],
-        name: json['name'],
-        shortDesc: json['shortDesc'],
-        longDesc: json['longDesc'],
-        timeToGrow: json['timeToGrow'],
-        attensionTime: json['attensionTime'],
-        promptHist: json['promptHist']);
+      id: json['_idP'],
+      name: json['name'],
+      image: json['image'],
+      shortDesc: json['shortDesc'],
+      longDesc: json['longDesc'],
+      timeToGrow: json['timeToGrow'],
+      attensionTime: json['attensionTime'],
+      promptHist: json['promptHist'],
+    );
   }
 }
