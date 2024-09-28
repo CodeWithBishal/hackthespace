@@ -14,16 +14,15 @@ class HardwareInformer extends _HardwareInformer
     String ip,
     String ssid,
     String passwd,
-    String userId, {
-    Iterable<int> gardenAssoc = const [],
-  }) {
+    int plantAssociated,
+    int id,
+  ) {
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'ip', ip);
     RealmObjectBase.set(this, 'ssid', ssid);
     RealmObjectBase.set(this, 'passwd', passwd);
-    RealmObjectBase.set<RealmList<int>>(
-        this, 'gardenAssoc', RealmList<int>(gardenAssoc));
-    RealmObjectBase.set(this, 'userId', userId);
+    RealmObjectBase.set(this, 'plantAssociated', plantAssociated);
+    RealmObjectBase.set(this, 'id', id);
   }
 
   HardwareInformer._();
@@ -49,16 +48,16 @@ class HardwareInformer extends _HardwareInformer
   set passwd(String value) => RealmObjectBase.set(this, 'passwd', value);
 
   @override
-  RealmList<int> get gardenAssoc =>
-      RealmObjectBase.get<int>(this, 'gardenAssoc') as RealmList<int>;
+  int get plantAssociated =>
+      RealmObjectBase.get<int>(this, 'plantAssociated') as int;
   @override
-  set gardenAssoc(covariant RealmList<int> value) =>
-      throw RealmUnsupportedSetError();
+  set plantAssociated(int value) =>
+      RealmObjectBase.set(this, 'plantAssociated', value);
 
   @override
-  String get userId => RealmObjectBase.get<String>(this, 'userId') as String;
+  int get id => RealmObjectBase.get<int>(this, 'id') as int;
   @override
-  set userId(String value) => RealmObjectBase.set(this, 'userId', value);
+  set id(int value) => RealmObjectBase.set(this, 'id', value);
 
   @override
   Stream<RealmObjectChanges<HardwareInformer>> get changes =>
@@ -79,8 +78,8 @@ class HardwareInformer extends _HardwareInformer
       'ip': ip.toEJson(),
       'ssid': ssid.toEJson(),
       'passwd': passwd.toEJson(),
-      'gardenAssoc': gardenAssoc.toEJson(),
-      'userId': userId.toEJson(),
+      'plantAssociated': plantAssociated.toEJson(),
+      'id': id.toEJson(),
     };
   }
 
@@ -93,15 +92,16 @@ class HardwareInformer extends _HardwareInformer
         'ip': EJsonValue ip,
         'ssid': EJsonValue ssid,
         'passwd': EJsonValue passwd,
-        'userId': EJsonValue userId,
+        'plantAssociated': EJsonValue plantAssociated,
+        'id': EJsonValue id,
       } =>
         HardwareInformer(
           fromEJson(name),
           fromEJson(ip),
           fromEJson(ssid),
           fromEJson(passwd),
-          fromEJson(userId),
-          gardenAssoc: fromEJson(ejson['gardenAssoc']),
+          fromEJson(plantAssociated),
+          fromEJson(id),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -116,9 +116,8 @@ class HardwareInformer extends _HardwareInformer
       SchemaProperty('ip', RealmPropertyType.string),
       SchemaProperty('ssid', RealmPropertyType.string),
       SchemaProperty('passwd', RealmPropertyType.string),
-      SchemaProperty('gardenAssoc', RealmPropertyType.int,
-          collectionType: RealmCollectionType.list),
-      SchemaProperty('userId', RealmPropertyType.string, primaryKey: true),
+      SchemaProperty('plantAssociated', RealmPropertyType.int),
+      SchemaProperty('id', RealmPropertyType.int, primaryKey: true),
     ]);
   }();
 

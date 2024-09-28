@@ -13,6 +13,7 @@ class _PlantInformer {
   late String longDesc;
   late String timeToGrow;
   late List<String> promptHist;
+  late int deviceAssociated;
 }
 
 class Plant {
@@ -23,15 +24,18 @@ class Plant {
   late String longDesc;
   late String timeToGrow;
   late List<String> promptHist;
+  late int deviceAssociated;
 
-  Plant(
-      {this.id = 0,
-      required this.name,
-      required this.image,
-      this.shortDesc = "",
-      this.longDesc = "",
-      required this.timeToGrow,
-      this.promptHist = const []});
+  Plant({
+    this.id = 0,
+    required this.name,
+    required this.image,
+    this.shortDesc = "",
+    this.longDesc = "",
+    required this.timeToGrow,
+    this.deviceAssociated = 0,
+    this.promptHist = const [],
+  });
 
   factory Plant.fromJson(Map<String, dynamic> json) {
     return Plant(
@@ -41,6 +45,7 @@ class Plant {
       shortDesc: json['shortDesc'] ?? '',
       longDesc: json['longDesc'] ?? '',
       timeToGrow: json['timeToGrow'] ?? "",
+      deviceAssociated: json['deviceAssociated'] ?? 0,
       promptHist: (json['promptHist'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??

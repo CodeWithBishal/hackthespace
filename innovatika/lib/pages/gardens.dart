@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:innovatika/database/informer_garden.dart';
+import 'package:innovatika/pages/view_plant.dart';
 import 'package:innovatika/widget/loading.dart';
 import 'package:realm/realm.dart';
 
@@ -43,39 +44,55 @@ class _GardensState extends State<Gardens> {
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     var garData = snapshot.data![index];
-                    return ListTile(
-                      tileColor: Theme.of(context).colorScheme.surface,
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 20.0, horizontal: 20.0),
-                      leading: Image.network(
-                        garData.imgURL,
-                        width: 70,
-                        height: 70,
-                        fit: BoxFit.cover,
-                      ),
-                      title: Text(
-                        "Garden ${garData.id + 1}",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                    return Column(
+                      children: [
+                        ListTile(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ViewPlant(
+                                  associatedPlant: garData.plantAssoc,
+                                ),
+                              ),
+                            );
+                          },
+                          tileColor: Theme.of(context).colorScheme.surface,
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 20.0, horizontal: 20.0),
+                          leading: Image.network(
+                            garData.imgURL,
+                            width: 70,
+                            height: 70,
+                            fit: BoxFit.cover,
+                          ),
+                          title: Text(
+                            "Garden ${garData.id + 1}",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(
+                            garData.dateTime,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          trailing: Container(
+                            padding: EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.blueAccent,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              "${garData.plantAssoc.length} Plants",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ),
-                      ),
-                      subtitle: Text(
-                        garData.dateTime,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      trailing: Container(
-                        padding: EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Colors.blueAccent,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          "${garData.plantAssoc.length} Plants",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                        Divider()
+                      ],
                     );
                   },
                 );

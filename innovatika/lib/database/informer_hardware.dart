@@ -7,9 +7,9 @@ class _HardwareInformer {
   late String ip;
   late String ssid;
   late String passwd;
-  late List<int> gardenAssoc;
+  late int plantAssociated;
   @PrimaryKey()
-  late String userId;
+  late int id;
 }
 
 class Hardware {
@@ -17,15 +17,16 @@ class Hardware {
   late String ip;
   late String ssid;
   late String passwd;
-  late List<int> gardenAssoc;
-  late String userId;
+  late int plantAssociated;
+
+  late int id;
   Hardware({
     required this.name,
     required this.ip,
     required this.ssid,
     required this.passwd,
-    this.gardenAssoc = const [],
-    required this.userId,
+    this.plantAssociated = 0,
+    required this.id,
   });
 
   factory Hardware.fromJson(Map<String, dynamic> json) {
@@ -34,10 +35,8 @@ class Hardware {
       ip: json['ip'],
       ssid: json['ssid'],
       passwd: json['passwd'],
-      gardenAssoc: json['gardenAssoc'] != null
-          ? List<int>.from(json['gardenAssoc'])
-          : [],
-      userId: json['userId'],
+      plantAssociated: json['plantAssociated'] ?? 0,
+      id: json['id'],
     );
   }
 }

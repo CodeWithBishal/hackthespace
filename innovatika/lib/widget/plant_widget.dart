@@ -14,8 +14,15 @@ class PlantManager {
 
   Future<void> addPlant(Plant plant, int id) async {
     final realm = await Realm.open(Configuration.local([PlantInformer.schema]));
-    var garData = PlantInformer(id, plant.name, plant.image, plant.shortDesc,
-        plant.longDesc, plant.timeToGrow);
+    var garData = PlantInformer(
+      id,
+      plant.name,
+      plant.image,
+      plant.shortDesc,
+      plant.longDesc,
+      plant.timeToGrow,
+      plant.deviceAssociated,
+    );
     realm.write(() {
       realm.add(garData);
     });

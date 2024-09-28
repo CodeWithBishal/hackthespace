@@ -34,9 +34,6 @@ class _PlantDetailsState extends State<PlantDetails> {
 
   final TextEditingController gardenNameC = TextEditingController();
 
-  late String description;
-  late String technique;
-  late String timeToGrow;
   late bool isShowpage = false;
   Future fetchDescription() async {
     final stringJsonData = await GeminiClient(model: "gemini-1.5-flash-latest")
@@ -48,12 +45,12 @@ class _PlantDetailsState extends State<PlantDetails> {
     final Map<String, dynamic> jsonData = jsonDecode(stringJsonData);
 
     setState(() {
-      description = jsonData["description"] ?? "";
-      technique = jsonData["techniques"] ?? "";
-      timeToGrow = jsonData["timeToGrow"] ?? "";
+      widget.plant.longDesc = jsonData["description"] ?? "";
+      widget.plant.shortDesc = jsonData["techniques"] ?? "";
+      widget.plant.timeToGrow = jsonData["timeToGrow"] ?? "";
     });
 
-    if (description.isEmpty || technique.isEmpty) {
+    if (widget.plant.longDesc.isEmpty || widget.plant.shortDesc.isEmpty) {
       if (!mounted) return;
       fetchDescription();
     } else {
@@ -61,6 +58,63 @@ class _PlantDetailsState extends State<PlantDetails> {
         isShowpage = true;
       });
     }
+  }
+
+  void addGardenFn(
+    BuildContext context,
+    int gardenID,
+  ) async {
+    final url = await fetchGardenImage();
+    GardenManager().addGarden(gardenID, url);
+    var plantList = await PlantManager().listPlant();
+    int plantLastID = 0;
+    if (plantList.isNotEmpty) {
+      plantLastID = plantList.last?.id + 1 ?? 0;
+    }
+    PlantManager().addPlant(widget.plant, plantLastID);
+    GardenManager().addAssociates(
+      gardenID,
+      plantLastID,
+    );
+    if (!context.mounted) return;
+    toastification.show(
+      context: context,
+      type: ToastificationType.success,
+      style: ToastificationStyle.flat,
+      alignment: Alignment.bottomCenter,
+      autoCloseDuration: const Duration(seconds: 5),
+      title: Text(
+        "Garden Added Successfully",
+        textAlign: TextAlign.center,
+      ),
+    );
+    Navigator.of(context).pop();
+  }
+
+  void addPlant(int gardenID) async {
+    var plantList = await PlantManager().listPlant();
+    int plantLastID = 0;
+    if (plantList.isNotEmpty) {
+      plantLastID = plantList.last?.id + 1 ?? 0;
+    }
+    PlantManager().addPlant(widget.plant, plantLastID);
+    GardenManager().addAssociates(
+      gardenID,
+      plantLastID,
+    );
+    if (!mounted) return;
+    toastification.show(
+      context: context,
+      type: ToastificationType.success,
+      style: ToastificationStyle.flat,
+      alignment: Alignment.bottomCenter,
+      autoCloseDuration: const Duration(seconds: 5),
+      title: Text(
+        "Plant Added Successfully",
+        textAlign: TextAlign.center,
+      ),
+    );
+    Navigator.of(context).pop();
   }
 
   Future loadNetworkImg() async {
@@ -98,29 +152,68 @@ class _PlantDetailsState extends State<PlantDetails> {
       showModalBottomSheet(
         backgroundColor: Color.fromARGB(255, 237, 228, 251),
         context: context,
-        isScrollControlled: true,
+        isScrollControlled: false,
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: Image.network(garden[index].imgURL),
-                  title: Text(garden[index].id),
-                  trailing: IconButton(
-                    onPressed: () async {
-                      var plantList = await PlantManager().listPlant();
-                      int plantLastID = plantList.last?.id ?? 0;
-                      PlantManager().addPlant(widget.plant, plantLastID);
-                      GardenManager()
-                          .addAssociates(garden[index].id, plantLastID);
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: garden.length,
+                    itemBuilder: (context, index) {
+                      var garData = garden[index];
+                      return GestureDetector(
+                        onTap: () {
+                          addPlant(garData.id);
+                        },
+                        child: ListTile(
+                          tileColor: Theme.of(context).colorScheme.surface,
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 20.0, horizontal: 20.0),
+                          leading: Image.network(
+                            garData.imgURL,
+                            width: 70,
+                            height: 70,
+                            fit: BoxFit.cover,
+                          ),
+                          title: Text(
+                            "Garden ${garData.id + 1}",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(
+                            garData.dateTime,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          trailing: Container(
+                            padding: EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.blueAccent,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              "${garData.plantAssoc.length} Plants",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      );
                     },
-                    icon: Icon(
-                      Iconsax.tick_circle,
-                    ),
                   ),
-                );
-                // return Container();
-              },
+                ),
+                Divider(),
+                TextButton.icon(
+                  onPressed: () {
+                    addGardenFn(context, gardenID + 1);
+                  },
+                  icon: Icon(Iconsax.add),
+                  label: Text("Add Garden"),
+                )
+              ],
             );
           });
         },
@@ -181,7 +274,7 @@ class _PlantDetailsState extends State<PlantDetails> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              timeToGrow,
+                              widget.plant.timeToGrow,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 15,
@@ -195,37 +288,10 @@ class _PlantDetailsState extends State<PlantDetails> {
                               onPressed: () async {
                                 final garden =
                                     await GardenManager().listGarden();
-                                int gardenID = 0;
+
                                 if (!context.mounted) return;
                                 if (garden.isEmpty) {
-                                  final url = await fetchGardenImage();
-                                  GardenManager().addGarden(gardenID, url);
-                                  var plantList =
-                                      await PlantManager().listPlant();
-                                  int plantLastID = 0;
-                                  if (plantList.isNotEmpty) {
-                                    plantLastID = plantList.last?.id ?? 0;
-                                  }
-                                  PlantManager()
-                                      .addPlant(widget.plant, plantLastID);
-                                  GardenManager().addAssociates(
-                                    gardenID,
-                                    plantLastID,
-                                  );
-                                  if (!context.mounted) return;
-                                  toastification.show(
-                                    context: context,
-                                    type: ToastificationType.success,
-                                    style: ToastificationStyle.flat,
-                                    alignment: Alignment.bottomCenter,
-                                    autoCloseDuration:
-                                        const Duration(seconds: 5),
-                                    title: Text(
-                                      "Garden Added Successfully",
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  );
-                                  Navigator.of(context).pop();
+                                  addGardenFn(context, 0);
                                 } else {
                                   var gardenList =
                                       await GardenManager().listGarden();
@@ -283,7 +349,7 @@ class _PlantDetailsState extends State<PlantDetails> {
                         textAlign: TextAlign.start,
                       ),
                       Text(
-                        description,
+                        widget.plant.longDesc,
                         textAlign: TextAlign.justify,
                         style: const TextStyle(
                           color: Colors.black,
@@ -304,7 +370,7 @@ class _PlantDetailsState extends State<PlantDetails> {
                         textAlign: TextAlign.start,
                       ),
                       Text(
-                        technique,
+                        widget.plant.shortDesc,
                         textAlign: TextAlign.justify,
                         style: const TextStyle(
                           color: Colors.black,
