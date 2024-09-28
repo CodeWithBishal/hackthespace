@@ -2,18 +2,18 @@
 import 'package:realm/realm.dart';
 import 'package:innovatika/database/informer_hardware.dart';
 
-class PlantManager {
-  Future<List> listPlant() async {
+class HardwareManager {
+  Future<List> listDevices() async {
     final realm =
         await Realm.open(Configuration.local([HardwareInformer.schema]));
-    var plant = realm.all<HardwareInformer>().toList();
-    if (plant.isEmpty) {
+    var devices = realm.all<HardwareInformer>().toList();
+    if (devices.isEmpty) {
       return [];
     }
-    return plant;
+    return devices;
   }
 
-  Future<void> addPlant(Hardware hardware) async {
+  Future<void> addHardware(Hardware hardware) async {
     final realm =
         await Realm.open(Configuration.local([HardwareInformer.schema]));
     var garData = HardwareInformer(

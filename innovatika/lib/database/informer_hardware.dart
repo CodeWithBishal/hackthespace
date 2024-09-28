@@ -13,30 +13,29 @@ class _HardwareInformer {
 }
 
 class Hardware {
+  late int id;
   late String name;
   late String ip;
   late String ssid;
   late String passwd;
   late int plantAssociated;
-
-  late int id;
   Hardware({
+    required this.id,
     required this.name,
     required this.ip,
     required this.ssid,
     required this.passwd,
-    this.plantAssociated = 0,
-    required this.id,
+    this.plantAssociated = -1,
   });
 
   factory Hardware.fromJson(Map<String, dynamic> json) {
     return Hardware(
+      id: json['id'],
       name: json['name'],
       ip: json['ip'],
       ssid: json['ssid'],
       passwd: json['passwd'],
-      plantAssociated: json['plantAssociated'] ?? 0,
-      id: json['id'],
+      plantAssociated: json['plantAssociated'] ?? -1,
     );
   }
 }

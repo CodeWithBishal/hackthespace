@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:innovatika/database/informer_hardware.dart';
 import 'package:innovatika/widget/appbar.dart';
+import 'package:innovatika/widget/associate_plant.dart';
+import 'package:innovatika/widget/hardware_widget.dart';
 import 'package:innovatika/widget/loading.dart';
+import 'package:innovatika/widget/plant_widget.dart';
 import 'package:innovatika/widget/wifi.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:toastification/toastification.dart';
@@ -77,25 +80,42 @@ class _DeviceSetupState extends State<DeviceSetup> {
           });
           return;
         } else {
-          //TODO
-          Hardware(
-            name: devName.text,
-            ip: ipAddr.text,
-            ssid: ssid.text,
-            passwd: password.text,
-            id: 0,
-          );
-          toastification.show(
-            context: context,
-            type: ToastificationType.success,
-            style: ToastificationStyle.flat,
-            alignment: Alignment.bottomCenter,
-            autoCloseDuration: const Duration(seconds: 5),
-            title: const Text(
-              'Device Added Successfully!',
-              textAlign: TextAlign.center,
-            ),
-          );
+          var listPlants = await PlantManager().listPlant();
+          if (listPlants.isEmpty) {
+            var deviceList = await HardwareManager().listDevices();
+            int deviceLastID = 0;
+            if (deviceList.isNotEmpty) {
+              deviceLastID = deviceList.last?.id + 1 ?? 0;
+            }
+            Hardware hardware = Hardware(
+              name: devName.text,
+              ip: ipAddr.text,
+              ssid: ssid.text,
+              passwd: password.text,
+              id: deviceLastID,
+            );
+            HardwareManager().addHardware(hardware);
+            if (!context.mounted) return;
+            toastification.show(
+              context: context,
+              type: ToastificationType.success,
+              style: ToastificationStyle.flat,
+              alignment: Alignment.bottomCenter,
+              autoCloseDuration: const Duration(seconds: 5),
+              title: const Text(
+                'Device Added Successfully!',
+                textAlign: TextAlign.center,
+              ),
+            );
+          } else {
+            if (!context.mounted) return;
+            associatePlant(context, listPlants, [
+              devName.text,
+              ipAddr.text,
+              ssid.text,
+              password.text,
+            ]);
+          }
           setState(() {
             isLoading = false;
           });

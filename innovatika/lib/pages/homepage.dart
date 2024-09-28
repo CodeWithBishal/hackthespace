@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:innovatika/database/informer_hardware.dart';
+import 'package:innovatika/database/informer_plant.dart';
+import 'package:innovatika/widget/associate_plant.dart';
 import 'package:innovatika/widget/loading.dart';
+import 'package:innovatika/widget/plant_widget.dart';
 import 'package:realm/realm.dart';
 
 class Homepage extends StatefulWidget {
@@ -51,8 +54,17 @@ class _HomepageState extends State<Homepage> {
               itemBuilder: (context, index) {
                 final device = devices[index];
                 return GestureDetector(
-                  onTap: () {
-                    //TODO
+                  onTap: () async {
+                    if (device.plantAssociated == -1) {
+                      // Open a Realm instance
+                      var config = await Realm.open(
+                          Configuration.local(([PlantInformer.schema])));
+
+                      // Fetch all users from MongoDB Realm
+                      var plantt = config.all<PlantInformer>().toList();
+                      if (!context.mounted) return;
+                      associatePlant(context, plantt);
+                    }
                   },
                   child: Container(
                     margin: const EdgeInsets.all(12),
