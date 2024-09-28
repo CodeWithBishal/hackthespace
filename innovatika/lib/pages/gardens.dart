@@ -54,7 +54,7 @@ class _GardensState extends State<Gardens> {
                         fit: BoxFit.cover,
                       ),
                       title: Text(
-                        "Garden ${garData.id}",
+                        "Garden ${garData.id + 1}",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

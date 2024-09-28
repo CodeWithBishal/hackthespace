@@ -90,144 +90,6 @@ class _PlantDetailsState extends State<PlantDetails> {
     final height = MediaQuery.of(context).size.height;
 
     ///
-    TextFormField gardenName = TextFormField(
-      controller: gardenNameC,
-      expands: false,
-      autofocus: false,
-      textInputAction: TextInputAction.done,
-      style: const TextStyle(
-        fontWeight: FontWeight.w300,
-        fontSize: 15,
-      ),
-      validator: (value) {
-        return null;
-      },
-      keyboardType: TextInputType.text,
-      decoration: const InputDecoration(
-        labelText: "Garden Name",
-        // prefixIcon: Icon(
-        //   LineIcons.university,
-        // ),
-      ),
-    );
-    void createGardenWid(BuildContext context, gardenID) async {
-      late bool isLoading = false;
-      final width = MediaQuery.of(context).size.width;
-      final height = MediaQuery.of(context).size.height;
-      final url = await fetchGardenImage();
-      if (!context.mounted) return;
-      showModalBottomSheet(
-        backgroundColor: Color.fromARGB(255, 237, 228, 251),
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return Padding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
-                child: SizedBox(
-                  width: width,
-                  height: height / 4,
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        width: width - width / 15,
-                        child: const Text(
-                          "Add Garden ➕",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: width - width / 15,
-                        child: const Text(
-                          "Create a Garden using Garden ID",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        width: width - width / 15,
-                        child: Stack(
-                          children: [
-                            gardenName,
-                            Positioned(
-                              right: 3,
-                              bottom: 6,
-                              child: IconButton(
-                                onPressed: isLoading
-                                    ? null
-                                    : () async {
-                                        if (gardenNameC.text.isNotEmpty &&
-                                            url.isNotEmpty) {
-                                          setState(() {
-                                            isLoading = true;
-                                          });
-                                          GardenManager()
-                                              .addGarden(gardenID, url);
-                                          var plantList =
-                                              await PlantManager().listPlant();
-                                          int plantLastID = 0;
-                                          if (plantList.isNotEmpty) {
-                                            plantLastID =
-                                                plantList.last?.id ?? 0;
-                                          }
-                                          PlantManager().addPlant(
-                                              widget.plant, plantLastID);
-                                          GardenManager().addAssociates(
-                                            gardenID,
-                                            plantLastID,
-                                          );
-                                          if (!context.mounted) return;
-                                          toastification.show(
-                                            context: context,
-                                            type: ToastificationType.success,
-                                            style: ToastificationStyle.flat,
-                                            alignment: Alignment.bottomCenter,
-                                            autoCloseDuration:
-                                                const Duration(seconds: 5),
-                                            title: Text(
-                                              "Garden Added Successfully",
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          );
-                                          Navigator.of(context).pop();
-                                        }
-                                      },
-                                icon: const Icon(
-                                  Icons.check,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      );
-    }
 
     void listGardens(BuildContext context, List<dynamic> garden, int gardenID) {
       // late bool isLoading = false;
@@ -242,14 +104,15 @@ class _PlantDetailsState extends State<PlantDetails> {
             return ListView.builder(
               itemBuilder: (context, index) {
                 return ListTile(
-                  leading: Image(image: garden[index].imgURL),
-                  title: Text(garden[index].name),
+                  leading: Image.network(garden[index].imgURL),
+                  title: Text(garden[index].id),
                   trailing: IconButton(
                     onPressed: () async {
-                      var list = await PlantManager().listPlant();
-                      int lastID = list.last?.id ?? 0;
-                      PlantManager().addPlant(widget.plant, lastID);
-                      GardenManager().addAssociates(garden[index].id, lastID);
+                      var plantList = await PlantManager().listPlant();
+                      int plantLastID = plantList.last?.id ?? 0;
+                      PlantManager().addPlant(widget.plant, plantLastID);
+                      GardenManager()
+                          .addAssociates(garden[index].id, plantLastID);
                     },
                     icon: Icon(
                       Iconsax.tick_circle,
@@ -332,14 +195,43 @@ class _PlantDetailsState extends State<PlantDetails> {
                               onPressed: () async {
                                 final garden =
                                     await GardenManager().listGarden();
+                                int gardenID = 0;
                                 if (!context.mounted) return;
                                 if (garden.isEmpty) {
-                                  createGardenWid(context, 0);
-                                } else {
-                                  var list = await GardenManager().listGarden();
-                                  int lastID = list.last?.id ?? 0;
+                                  final url = await fetchGardenImage();
+                                  GardenManager().addGarden(gardenID, url);
+                                  var plantList =
+                                      await PlantManager().listPlant();
+                                  int plantLastID = 0;
+                                  if (plantList.isNotEmpty) {
+                                    plantLastID = plantList.last?.id ?? 0;
+                                  }
+                                  PlantManager()
+                                      .addPlant(widget.plant, plantLastID);
+                                  GardenManager().addAssociates(
+                                    gardenID,
+                                    plantLastID,
+                                  );
                                   if (!context.mounted) return;
-                                  listGardens(context, garden, lastID);
+                                  toastification.show(
+                                    context: context,
+                                    type: ToastificationType.success,
+                                    style: ToastificationStyle.flat,
+                                    alignment: Alignment.bottomCenter,
+                                    autoCloseDuration:
+                                        const Duration(seconds: 5),
+                                    title: Text(
+                                      "Garden Added Successfully",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  );
+                                  Navigator.of(context).pop();
+                                } else {
+                                  var gardenList =
+                                      await GardenManager().listGarden();
+                                  int gardenID = gardenList.last?.id ?? 0;
+                                  if (!context.mounted) return;
+                                  listGardens(context, garden, gardenID);
                                 }
                                 //                       PlantManager().addPlant(widget.plant);
                                 //                       toastification.show(
