@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:innovatika/database/informer_hardware.dart';
 import 'package:innovatika/widget/hardware_widget.dart';
 import 'package:toastification/toastification.dart';

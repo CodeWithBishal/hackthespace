@@ -62,6 +62,7 @@ dependencies:
   mobile_scanner: ^5.2.3
   wifi_iot: ^0.3.19+1
   web_socket_channel: ^3.0.1
+  flutter_launcher_icons: ^0.14.1
   # background_remover: ^0.0.3
 
 dev_dependencies:
