@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:innovatika/database/informer_hardware.dart';
 import 'package:innovatika/database/informer_plant.dart';
+import 'package:innovatika/pages/view_device.dart';
 import 'package:innovatika/widget/associate_plant.dart';
+import 'package:innovatika/widget/hardware_widget.dart';
 import 'package:innovatika/widget/loading.dart';
-import 'package:innovatika/widget/plant_widget.dart';
 import 'package:realm/realm.dart';
 
 class Homepage extends StatefulWidget {
@@ -41,7 +42,7 @@ class _HomepageState extends State<Homepage> {
           if (snapshot.hasData) {
             var devices = snapshot.data;
             if (devices!.isEmpty) {
-              return emptyLoading();
+              return emptyLoading("No devices found");
             }
             return GridView.builder(
               itemCount: devices.length,
@@ -60,10 +61,29 @@ class _HomepageState extends State<Homepage> {
                       var config = await Realm.open(
                           Configuration.local(([PlantInformer.schema])));
 
-                      // Fetch all users from MongoDB Realm
+                      // Fetch all plant from MongoDB Realm
                       var plantt = config.all<PlantInformer>().toList();
+                      //fetch hardware
+                      Hardware hardware =
+                          await HardwareManager().accessHardware(device.id);
                       if (!context.mounted) return;
-                      associatePlant(context, plantt, []);
+                      associatePlant(
+                        context,
+                        plantt,
+                        [
+                          hardware.name,
+                          hardware.ip,
+                          hardware.ssid,
+                          hardware.passwd,
+                        ],
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewDevice(),
+                        ),
+                      );
                     }
                   },
                   child: Container(
@@ -156,7 +176,7 @@ class _HomepageState extends State<Homepage> {
               },
             );
           } else {
-            return emptyLoading();
+            return LoadingDeviceAnimation();
           }
         },
       ),

@@ -32,12 +32,12 @@ class _GardensState extends State<Gardens> {
             future: fetchDevices(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return emptyLoading();
+                return emptyLoading("No Garden found");
               }
               if (snapshot.hasData) {
                 var devices = snapshot.data;
                 if (devices!.isEmpty) {
-                  return emptyLoading();
+                  return emptyLoading("No Garden found");
                 }
 
                 return ListView.builder(
@@ -97,7 +97,7 @@ class _GardensState extends State<Gardens> {
                   },
                 );
               }
-              return emptyLoading();
+              return LoadingDeviceAnimation();
             },
           ),
         ),

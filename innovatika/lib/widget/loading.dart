@@ -22,7 +22,7 @@ Widget videoLoadingAnimation() {
   );
 }
 
-Widget emptyLoading() {
+Widget emptyLoading(String msg) {
   return Center(
       child: ListView(
     children: [
@@ -33,8 +33,8 @@ Widget emptyLoading() {
       const SizedBox(
         height: 10,
       ),
-      const Text(
-        'No devices found',
+      Text(
+        msg,
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 15,

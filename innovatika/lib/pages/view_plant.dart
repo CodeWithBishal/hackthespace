@@ -38,19 +38,18 @@ class _ViewPlantState extends State<ViewPlant> {
               future: fetchPlants(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return emptyLoading();
+                  return emptyLoading("No Plants found");
                 }
                 if (snapshot.hasData) {
                   var devices = snapshot.data;
                   if (devices!.isEmpty) {
-                    return emptyLoading();
+                    return emptyLoading("No Plants found");
                   }
 
                   return ListView.builder(
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       var plantData = snapshot.data![index];
-
                       if (!widget.associatedPlant.contains(plantData.id)) {
                         return Container();
                       }
@@ -97,7 +96,7 @@ class _ViewPlantState extends State<ViewPlant> {
                     },
                   );
                 }
-                return emptyLoading();
+                return LoadingDeviceAnimation();
               },
             ),
           ),

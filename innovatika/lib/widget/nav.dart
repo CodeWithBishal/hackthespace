@@ -5,6 +5,7 @@ import 'package:innovatika/pages/gardens.dart';
 import 'package:innovatika/pages/homepage.dart';
 import 'package:innovatika/pages/plant_catalogue.dart';
 import 'package:innovatika/widget/appbar.dart';
+import 'package:lottie/lottie.dart';
 
 class NavBar extends StatefulWidget {
   final int? index;
@@ -16,6 +17,25 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   late int _selectedIndex = 0;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    precacheImage(const AssetImage('assets/images/flower.png'), context);
+    precacheImage(const AssetImage('assets/images/fruit.png'), context);
+    precacheImage(const AssetImage('assets/images/vegetables.png'), context);
+    precacheImage(const AssetImage('assets/images/herbs.png'), context);
+    precacheImage(const AssetImage('assets/images/shrubs.png'), context);
+    _preloadAnimation();
+  }
+
+  Future<void> _preloadAnimation() async {
+    final animation1 = AssetLottie('assets/animation/wait.json');
+    await animation1.load();
+    // setState(() {
+    //   oldComposition = composition;
+    // });
+  }
+
   @override
   void initState() {
     if (widget.index != null) {

@@ -21,25 +21,6 @@ class PlantCategorization extends StatefulWidget {
 }
 
 class _PlantCategorizationState extends State<PlantCategorization> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    precacheImage(const AssetImage('assets/images/flower.png'), context);
-    precacheImage(const AssetImage('assets/images/fruit.png'), context);
-    precacheImage(const AssetImage('assets/images/vegetables.png'), context);
-    precacheImage(const AssetImage('assets/images/herbs.png'), context);
-    precacheImage(const AssetImage('assets/images/shrubs.png'), context);
-    _preloadAnimation();
-  }
-
-  Future<void> _preloadAnimation() async {
-    final animation1 = AssetLottie('assets/animation/wait.json');
-    await animation1.load();
-    // setState(() {
-    //   oldComposition = composition;
-    // });
-  }
-
   //
   //
   //
