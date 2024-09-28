@@ -50,4 +50,22 @@ class HardwareManager {
       });
     }
   }
+
+  Future<Hardware> accessHardware(int id) async {
+    final realm =
+        await Realm.open(Configuration.local([HardwareInformer.schema]));
+    var idData = realm.find<HardwareInformer>(id);
+    if (idData != null) {
+      return Hardware(
+        name: idData.name,
+        ip: idData.ip,
+        ssid: idData.ssid,
+        passwd: idData.passwd,
+        plantAssociated: idData.plantAssociated,
+        id: idData.id,
+      );
+    } else {
+      throw Exception('Hardware not found');
+    }
+  }
 }
