@@ -78,10 +78,16 @@ class _HomepageState extends State<Homepage> {
                         ],
                       );
                     } else {
+                      Hardware hardware =
+                          await HardwareManager().accessHardware(device.id);
+                      if (!context.mounted) return;
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ViewDevice(),
+                          builder: (context) => ViewDevice(
+                            hardware: hardware,
+                          ),
                         ),
                       );
                     }
@@ -161,7 +167,7 @@ class _HomepageState extends State<Homepage> {
                           height: 10,
                         ),
                         Text(
-                          device.name,
+                          "IoT",
                           style: const TextStyle(
                             color: Color(0xff0f52ba),
                             fontSize: 20,
