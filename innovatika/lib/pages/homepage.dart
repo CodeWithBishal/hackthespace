@@ -63,7 +63,7 @@ class _HomepageState extends State<Homepage> {
                       // Fetch all users from MongoDB Realm
                       var plantt = config.all<PlantInformer>().toList();
                       if (!context.mounted) return;
-                      associatePlant(context, plantt);
+                      associatePlant(context, plantt, []);
                     }
                   },
                   child: Container(
