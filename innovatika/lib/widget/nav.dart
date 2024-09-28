@@ -1,7 +1,7 @@
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:innovatika/pages/gardens.dart';
 import 'package:innovatika/pages/homepage.dart';
 import 'package:innovatika/pages/plant_catalogue.dart';
 import 'package:innovatika/widget/appbar.dart';
@@ -29,7 +29,7 @@ class _NavBarState extends State<NavBar> {
     List<Widget> tabItems = [
       const Homepage(),
       PlantCategorization(),
-      const Center(child: Text("3")),
+      const Gardens(),
     ];
 
     return Scaffold(

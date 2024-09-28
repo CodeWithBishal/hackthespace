@@ -15,7 +15,8 @@ class PlantInformer extends _PlantInformer
     String image,
     String shortDesc,
     String longDesc,
-    String timeToGrow, {
+    String timeToGrow,
+    int deviceAssociated, {
     Iterable<String> promptHist = const [],
   }) {
     RealmObjectBase.set(this, '_idP', id);
@@ -26,6 +27,7 @@ class PlantInformer extends _PlantInformer
     RealmObjectBase.set(this, 'timeToGrow', timeToGrow);
     RealmObjectBase.set<RealmList<String>>(
         this, 'promptHist', RealmList<String>(promptHist));
+    RealmObjectBase.set(this, 'deviceAssociated', deviceAssociated);
   }
 
   PlantInformer._();
@@ -72,6 +74,13 @@ class PlantInformer extends _PlantInformer
       throw RealmUnsupportedSetError();
 
   @override
+  int get deviceAssociated =>
+      RealmObjectBase.get<int>(this, 'deviceAssociated') as int;
+  @override
+  set deviceAssociated(int value) =>
+      RealmObjectBase.set(this, 'deviceAssociated', value);
+
+  @override
   Stream<RealmObjectChanges<PlantInformer>> get changes =>
       RealmObjectBase.getChanges<PlantInformer>(this);
 
@@ -92,6 +101,7 @@ class PlantInformer extends _PlantInformer
       'longDesc': longDesc.toEJson(),
       'timeToGrow': timeToGrow.toEJson(),
       'promptHist': promptHist.toEJson(),
+      'deviceAssociated': deviceAssociated.toEJson(),
     };
   }
 
@@ -106,6 +116,7 @@ class PlantInformer extends _PlantInformer
         'shortDesc': EJsonValue shortDesc,
         'longDesc': EJsonValue longDesc,
         'timeToGrow': EJsonValue timeToGrow,
+        'deviceAssociated': EJsonValue deviceAssociated,
       } =>
         PlantInformer(
           fromEJson(id),
@@ -114,6 +125,7 @@ class PlantInformer extends _PlantInformer
           fromEJson(shortDesc),
           fromEJson(longDesc),
           fromEJson(timeToGrow),
+          fromEJson(deviceAssociated),
           promptHist: fromEJson(ejson['promptHist']),
         ),
       _ => raiseInvalidEJson(ejson),
@@ -134,6 +146,7 @@ class PlantInformer extends _PlantInformer
       SchemaProperty('timeToGrow', RealmPropertyType.string),
       SchemaProperty('promptHist', RealmPropertyType.string,
           collectionType: RealmCollectionType.list),
+      SchemaProperty('deviceAssociated', RealmPropertyType.int),
     ]);
   }();
 

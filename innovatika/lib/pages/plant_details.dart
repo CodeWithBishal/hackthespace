@@ -2,10 +2,15 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:innovatika/database/informer_plant.dart';
 import 'package:innovatika/widget/appbar.dart';
+import 'package:innovatika/widget/garden_api.dart';
+import 'package:innovatika/widget/garden_widget.dart';
 import 'package:innovatika/widget/gemini.dart';
+import 'package:innovatika/widget/plant_widget.dart';
 import 'package:lottie/lottie.dart';
+import 'package:toastification/toastification.dart';
 
 class PlantDetails extends StatefulWidget {
   final Plant plant;
@@ -26,26 +31,26 @@ class _PlantDetailsState extends State<PlantDetails> {
   //   description: "",
   //   technique: "",
   // );
-  late String description;
-  late String technique;
-  late String timeToGrow;
+
+  final TextEditingController gardenNameC = TextEditingController();
+
   late bool isShowpage = false;
   Future fetchDescription() async {
     final stringJsonData = await GeminiClient(model: "gemini-1.5-flash-latest")
         .generateContentFromText(
       prompt:
-          'Hi, I am trying to plant ${widget.plant.name} in my location ${widget.location}, first give me a brief description of the plant, some growing techniques and suggest me some caring techniques, give me the output strictly in json format and no other text, remove any kind of formatting and remove all newline characters. remember output strictly in json format and no other text. here is the format(key value): {"description": "All description goes here", "techniques":"All techniques goes here", "timeToGrow":"actual growing time here no other data"} in minimum 200 words,techniques must only contain the growing techniques and description should only contain a description, description and techniques should be strictly unique. both description and techniques keys should be present and strictly only json',
+          'Hi, I am trying to plant ${widget.plant.name} in my location ${widget.location}, first give me a brief description of the plant, some growing techniques and suggest me some caring techniques, give me the output strictly in json format and no other text, remove any kind of formatting and remove all newline characters. remember output strictly in json format and no other text. here is the format(key value): {"description": "All description goes here", "techniques":"All techniques goes here", "timeToGrow":"actual growing time in 10 letters"} in minimum 200 words,techniques must only contain the growing techniques and description should only contain a description, description and techniques should be strictly unique. both description and techniques keys should be present and strictly only json',
     );
 
     final Map<String, dynamic> jsonData = jsonDecode(stringJsonData);
 
     setState(() {
-      description = jsonData["description"] ?? "";
-      technique = jsonData["techniques"] ?? "";
-      timeToGrow = jsonData["timeToGrow"] ?? "";
+      widget.plant.longDesc = jsonData["description"] ?? "";
+      widget.plant.shortDesc = jsonData["techniques"] ?? "";
+      widget.plant.timeToGrow = jsonData["timeToGrow"] ?? "";
     });
 
-    if (description.isEmpty || technique.isEmpty) {
+    if (widget.plant.longDesc.isEmpty || widget.plant.shortDesc.isEmpty) {
       if (!mounted) return;
       fetchDescription();
     } else {
@@ -53,6 +58,63 @@ class _PlantDetailsState extends State<PlantDetails> {
         isShowpage = true;
       });
     }
+  }
+
+  void addGardenFn(
+    BuildContext context,
+    int gardenID,
+  ) async {
+    final url = await fetchGardenImage();
+    GardenManager().addGarden(gardenID, url);
+    var plantList = await PlantManager().listPlant();
+    int plantLastID = 0;
+    if (plantList.isNotEmpty) {
+      plantLastID = plantList.last?.id + 1 ?? 0;
+    }
+    PlantManager().addPlant(widget.plant, plantLastID);
+    GardenManager().addAssociates(
+      gardenID,
+      plantLastID,
+    );
+    if (!context.mounted) return;
+    toastification.show(
+      context: context,
+      type: ToastificationType.success,
+      style: ToastificationStyle.flat,
+      alignment: Alignment.bottomCenter,
+      autoCloseDuration: const Duration(seconds: 5),
+      title: Text(
+        "Garden Added Successfully",
+        textAlign: TextAlign.center,
+      ),
+    );
+    Navigator.of(context).pop();
+  }
+
+  void addPlant(int gardenID) async {
+    var plantList = await PlantManager().listPlant();
+    int plantLastID = 0;
+    if (plantList.isNotEmpty) {
+      plantLastID = plantList.last?.id + 1 ?? 0;
+    }
+    PlantManager().addPlant(widget.plant, plantLastID);
+    GardenManager().addAssociates(
+      gardenID,
+      plantLastID,
+    );
+    if (!mounted) return;
+    toastification.show(
+      context: context,
+      type: ToastificationType.success,
+      style: ToastificationStyle.flat,
+      alignment: Alignment.bottomCenter,
+      autoCloseDuration: const Duration(seconds: 5),
+      title: Text(
+        "Plant Added Successfully",
+        textAlign: TextAlign.center,
+      ),
+    );
+    Navigator.of(context).pop();
   }
 
   Future loadNetworkImg() async {
@@ -80,6 +142,85 @@ class _PlantDetailsState extends State<PlantDetails> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
+    ///
+
+    void listGardens(BuildContext context, List<dynamic> garden, int gardenID) {
+      // late bool isLoading = false;
+      // final width = MediaQuery.of(context).size.width;
+      // final height = MediaQuery.of(context).size.height;
+      showModalBottomSheet(
+        backgroundColor: Color.fromARGB(255, 237, 228, 251),
+        context: context,
+        isScrollControlled: false,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: garden.length,
+                    itemBuilder: (context, index) {
+                      var garData = garden[index];
+                      return GestureDetector(
+                        onTap: () {
+                          addPlant(garData.id);
+                        },
+                        child: ListTile(
+                          tileColor: Theme.of(context).colorScheme.surface,
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 20.0, horizontal: 20.0),
+                          leading: Image.network(
+                            garData.imgURL,
+                            width: 70,
+                            height: 70,
+                            fit: BoxFit.cover,
+                          ),
+                          title: Text(
+                            "Garden ${garData.id + 1}",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(
+                            garData.dateTime,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          trailing: Container(
+                            padding: EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.blueAccent,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              "${garData.plantAssoc.length} Plants",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Divider(),
+                TextButton.icon(
+                  onPressed: () {
+                    addGardenFn(context, gardenID + 1);
+                  },
+                  icon: Icon(Iconsax.add),
+                  label: Text("Add Garden"),
+                )
+              ],
+            );
+          });
+        },
+      );
+    }
+
+    ////
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: commonApp(
@@ -133,7 +274,7 @@ class _PlantDetailsState extends State<PlantDetails> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              timeToGrow,
+                              widget.plant.timeToGrow,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 15,
@@ -144,7 +285,33 @@ class _PlantDetailsState extends State<PlantDetails> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: TextButton.icon(
-                              onPressed: () {},
+                              onPressed: () async {
+                                final garden =
+                                    await GardenManager().listGarden();
+
+                                if (!context.mounted) return;
+                                if (garden.isEmpty) {
+                                  addGardenFn(context, 0);
+                                } else {
+                                  var gardenList =
+                                      await GardenManager().listGarden();
+                                  int gardenID = gardenList.last?.id ?? 0;
+                                  if (!context.mounted) return;
+                                  listGardens(context, garden, gardenID);
+                                }
+                                //                       PlantManager().addPlant(widget.plant);
+                                //                       toastification.show(
+                                //   context: context,
+                                //   type: ToastificationType.success,
+                                //   style: ToastificationStyle.flat,
+                                //   alignment: Alignment.bottomCenter,
+                                //   autoCloseDuration: const Duration(seconds: 5),
+                                //   title: Text(
+                                //     "Plan",
+                                //     textAlign: TextAlign.center,
+                                //   ),
+                                // );
+                              },
                               style: const ButtonStyle(
                                 backgroundColor: WidgetStatePropertyAll(
                                   Color(
@@ -182,7 +349,7 @@ class _PlantDetailsState extends State<PlantDetails> {
                         textAlign: TextAlign.start,
                       ),
                       Text(
-                        description,
+                        widget.plant.longDesc,
                         textAlign: TextAlign.justify,
                         style: const TextStyle(
                           color: Colors.black,
@@ -203,7 +370,7 @@ class _PlantDetailsState extends State<PlantDetails> {
                         textAlign: TextAlign.start,
                       ),
                       Text(
-                        technique,
+                        widget.plant.shortDesc,
                         textAlign: TextAlign.justify,
                         style: const TextStyle(
                           color: Colors.black,

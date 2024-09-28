@@ -21,3 +21,26 @@ Widget videoLoadingAnimation() {
     ),
   );
 }
+
+Widget emptyLoading() {
+  return Center(
+      child: ListView(
+    children: [
+      const SizedBox(
+        height: 40,
+      ),
+      Lottie.asset("assets/animation/empty.json"),
+      const SizedBox(
+        height: 10,
+      ),
+      const Text(
+        'No devices found',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 15,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    ],
+  ));
+}

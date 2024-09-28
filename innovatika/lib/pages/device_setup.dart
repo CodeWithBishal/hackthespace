@@ -83,7 +83,7 @@ class _DeviceSetupState extends State<DeviceSetup> {
             ip: ipAddr.text,
             ssid: ssid.text,
             passwd: password.text,
-            userId: "",
+            id: 0,
           );
           toastification.show(
             context: context,

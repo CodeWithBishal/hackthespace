@@ -2,7 +2,7 @@
 import 'package:realm/realm.dart';
 import 'package:innovatika/database/informer_garden.dart';
 
-class GardeManager {
+class GardenManager {
   // List of Garden
   /// Retrieves a list of all gardens from the database.
   ///
@@ -22,11 +22,15 @@ class GardeManager {
   ///
   /// The [id] parameter is the unique identifier for the garden.
   ///
-  /// The [noOfPlants] parameter is the number of plants in the garden.
-  Future<void> addGarden(int id, int noOfPlants) async {
+  Future<void> addGarden(int id, String imgURL) async {
+    var time = DateTime.now();
     final realm =
         await Realm.open(Configuration.local([GardenInformer.schema]));
-    var garData = GardenInformer(id, noOfPlants);
+    var garData = GardenInformer(
+      id,
+      imgURL,
+      time.toString(),
+    );
     realm.write(() {
       realm.add(garData);
     });

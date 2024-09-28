@@ -160,7 +160,7 @@ class _PlantCategorizationState extends State<PlantCategorization> {
         fruit = handleFruitMapping(geminiData);
       });
       for (int i = 0; i < fruit.length; i++) {
-        var img = await fetchImgUnsplash(fruit[i].name);
+        var img = await fetchImgUnsplash(fruit[i].name, false);
         setState(() {
           fruit[i].image = img.toString();
         });
@@ -169,7 +169,7 @@ class _PlantCategorizationState extends State<PlantCategorization> {
     if (category == "veggies") {
       veggies = handleVeggiesMapping(geminiData);
       for (int i = 0; i < veggies.length; i++) {
-        var img = await fetchImgUnsplash(veggies[i].name);
+        var img = await fetchImgUnsplash(veggies[i].name, false);
         setState(() {
           veggies[i].image = img.toString();
         });
@@ -178,7 +178,7 @@ class _PlantCategorizationState extends State<PlantCategorization> {
     if (category == "Flowers") {
       flower = handleVeggiesMapping(geminiData);
       for (int i = 0; i < flower.length; i++) {
-        var img = await fetchImgUnsplash(flower[i].name);
+        var img = await fetchImgUnsplash(flower[i].name, false);
         setState(() {
           flower[i].image = img.toString();
         });
@@ -187,7 +187,7 @@ class _PlantCategorizationState extends State<PlantCategorization> {
     if (category == "herbs") {
       herbs = handleVeggiesMapping(geminiData);
       for (int i = 0; i < herbs.length; i++) {
-        var img = await fetchImgUnsplash(herbs[i].name);
+        var img = await fetchImgUnsplash(herbs[i].name, false);
         setState(() {
           herbs[i].image = img.toString();
         });
@@ -196,7 +196,7 @@ class _PlantCategorizationState extends State<PlantCategorization> {
     if (category == "shrubs") {
       shrubs = handleVeggiesMapping(geminiData);
       for (int i = 0; i < shrubs.length; i++) {
-        var img = await fetchImgUnsplash(shrubs[i].name);
+        var img = await fetchImgUnsplash(shrubs[i].name, false);
         setState(() {
           shrubs[i].image = img.toString();
         });
