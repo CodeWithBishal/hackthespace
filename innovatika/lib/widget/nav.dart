@@ -29,11 +29,9 @@ class _NavBarState extends State<NavBar> {
   }
 
   Future<void> _preloadAnimation() async {
-    final animation1 = AssetLottie('assets/animation/wait.json');
-    await animation1.load();
-    // setState(() {
-    //   oldComposition = composition;
-    // });
+    await AssetLottie('assets/animation/wait.json').load();
+    await AssetLottie('assets/animation/geminiReqAnimation.json').load();
+    await AssetLottie('assets/animation/location.json').load();
   }
 
   @override
